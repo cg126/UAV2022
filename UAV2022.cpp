@@ -1,9 +1,11 @@
 ﻿#include "UAV2022.h"
 #include "function.h"
 
-String path, name, name1;
-Mat src, src1;
+String name, name1;
+Mat src1, src2;
 Mat outImage;
+Mat drone_pos;
+Mat diff_result;
 
 
 UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量赋初值）
@@ -45,7 +47,7 @@ UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量
 
 	connect(ui.pBt_LoadImage, SIGNAL(clicked()), this, SLOT(LoadImage()));	// 点击ui.pBt_LoadImage时，进行LoadImage()操作
 	connect(ui.pBt_LoadImage_2, SIGNAL(clicked()), this, SLOT(LoadImage_2()));
-	connect(ui.pBt_enlarge, SIGNAL(clicked()), this, SLOT(ImageEnlarge()));
+	connect(ui.pBt_Locate, SIGNAL(clicked()), this, SLOT(FirstLocate()));
 }
 
 
@@ -58,7 +60,7 @@ void UAV2022::LoadImage()
 	ui.label->setPixmap(pixmap);
 
 	name = ImagePath.toStdString();
-	src = imread(name);
+	src1 = imread(name);
 	
 	/*QImage *img = new QImage;
 	img->load("./resources/数据源.jpg");
@@ -74,7 +76,22 @@ void UAV2022::LoadImage_2()
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 
 	name1 = ImagePath.toStdString();
-	src1 = imread(name1);
+	src2 = imread(name1);
+}
+
+void UAV2022::FirstLocate()
+{
+	Mat greyFrame;
+
+	diff_result.create(greyFrame.size(), greyFrame.type());
+	Diff2frame(src1, src2, diff_result);
+	imwrite("./resources/tmp.jpg", diff_result);
+
+	QPixmap pixmap("./resources/tmp.jpg");
+	ui.label_2->setPixmap(pixmap);
+
+	//system("rm ./resources/tmp.jpg");
+	remove("./resources/tmp.jpg");
 }
 
 

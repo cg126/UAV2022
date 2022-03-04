@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QMainWindow>
 #include "ui_UAV2022.h"
+#include "function.h"
 
 class UAV2022 : public QWidget		// UAV2022¼Ì³ÐQWidget
 {
@@ -45,9 +46,11 @@ private:
 	QPoint Alloffset;
 	//bool event(QEvent *event);
 	//void wheelEvent(QWheelEvent *event);     //Êó±ê»¬ÂÖÊÂ¼þ
+
 public slots:
 	void LoadImage();
 	void LoadImage_2();
+	void FirstLocate();
 
 	//void ImageEnlarge();
 	//void ImageShrink();
