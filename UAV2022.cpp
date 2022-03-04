@@ -55,15 +55,16 @@ void UAV2022::LoadImage()
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 	QPixmap pixmap(ImagePath);
 
-	//name = "resources/数据源.jpg";
+	ui.label->setPixmap(pixmap);
+
 	name = ImagePath.toStdString();
 	src = imread(name);
 	
-	QImage *img = new QImage;
+	/*QImage *img = new QImage;
 	img->load("./resources/数据源.jpg");
-	ui.label->setPixmap(QPixmap::fromImage(*img));
+	ui.label->setPixmap(QPixmap::fromImage(*img));*/	// didn't work
 
-	ui.label->update();		// ？
+	//ui.label->update();		// ？
 }
 
 
@@ -71,11 +72,9 @@ void UAV2022::LoadImage_2()
 {
 	QString ImagePath;
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
-	QPixmap pixmap(ImagePath);
 
-	ui.label_2->setPixmap(pixmap);
-
-	ui.label_2->update();		// ？
+	name1 = ImagePath.toStdString();
+	src1 = imread(name1);
 }
 
 
