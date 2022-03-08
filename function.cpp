@@ -30,6 +30,56 @@ struct struct_area {
 
 };
 
+void FindSingleTarget(unsigned char * img0, int height, int width, vector<int>& Single_RowPos, vector<int>& Single_ColPos)
+{
+	const int w = width;
+	const int h = height;
+	float sumrows[480] = { 0 };
+	float sumrows1[480] = { 0 };
+	float sumrows2[480] = { 0 };
+	float sumcols[640] = { 0 };
+	float sumcols1[640] = { 0 };
+	float sumcols2[640] = { 0 };
+
+	int i = 0, j = 0;
+	int pointx = 0, pointy = 0;
+
+	ofstream outfile;
+	outfile.open(".\\tmp\\单目标水平投影.txt");
+
+	/**************水平投影*****************/
+
+	for (i = 0; i < height; i++)//水平投影
+	{
+		for (j = 0; j < width; j++)
+		{
+			sumrows[i] += (float)img0[i*width + j] / width;
+		}
+
+		outfile << sumrows[i] << endl;
+		if (i == 0)
+			continue;
+		if (sumrows[i] != 0)
+			Single_RowPos.push_back(i);
+	}
+
+
+
+	/****************竖直投影****************/
+	ofstream outfile1;
+	outfile1.open(".\\tmp\\单目标竖直投影.txt");
+	for (i = 0; i < width; i++)//竖直投影
+	{
+		for (j = 0; j < height; j++)
+		{
+			sumcols[i] += (float)img0[j*width + i] / height;
+		}
+		outfile1 << sumcols[i] << endl;
+		if (sumcols[i] != 0)
+			Single_ColPos.push_back(i);
+	}
+}
+
 //阈值分割
 int Otsu(Mat& src)
 {
@@ -112,7 +162,7 @@ void Diff2frame(Mat &mat1, Mat &mat2, Mat &result)
 
 	absdiff(greyFrame1, greyFrame2, result);	// per-element absolute difference
 
-	imwrite(".\\新数据中间结果\\帧间差分原始结果.jpg", result);
+	imwrite(".\\tmp\\帧间差分原始结果.jpg", result);
 
 	int thre = 20;
 	int greyMin, greyMax;
@@ -140,7 +190,7 @@ void Diff2frame(Mat &mat1, Mat &mat2, Mat &result)
 			greySum += m;
 		}
 
-	imwrite(".\\新数据中间结果\\归一化结果.jpg", result);
+	imwrite(".\\tmp\\归一化结果.jpg", result);
 
 	//平均灰度
 	greyAverage = greySum / width / height;
@@ -159,12 +209,12 @@ void Diff2frame(Mat &mat1, Mat &mat2, Mat &result)
 				result.at<uchar>(i, j) = 0;
 		}
 
-	imwrite(".\\新数据中间结果\\归一化二值结果.jpg", result);
+	imwrite(".\\tmp\\归一化二值结果.jpg", result);
 
 
 	ConnectDenoize2(result, height, width, 5);
 
-	imwrite(".\\新数据中间结果\\帧间差分结果.jpg", result);
+	imwrite(".\\tmp\\帧间差分结果.jpg", result);
 
 
 }

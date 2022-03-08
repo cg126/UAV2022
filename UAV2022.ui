@@ -14,7 +14,28 @@
    <string>UAV2022</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0" rowspan="10">
+   <item row="6" column="1">
+    <widget class="QPushButton" name="pBt_Locate">
+     <property name="text">
+      <string>矩形框和中心点标定</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QPushButton" name="pBt_Diff">
+     <property name="text">
+      <string>帧间差分</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QPushButton" name="pBt_radius">
+     <property name="text">
+      <string>调整极坐标半径</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="11">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
@@ -62,38 +83,17 @@
      </layout>
     </widget>
    </item>
-   <item row="6" column="1">
-    <widget class="QPushButton" name="pBt_radius">
-     <property name="text">
-      <string>调整极坐标半径</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
+   <item row="4" column="1">
     <widget class="QPushButton" name="pBt_LoadImage_2">
      <property name="text">
       <string>图片2</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QPushButton" name="pBt_Locate">
-     <property name="text">
-      <string>帧间结果</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
+   <item row="3" column="1">
     <widget class="QPushButton" name="pBt_LoadImage">
      <property name="text">
       <string>图片1</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QPushButton" name="pBt_center">
-     <property name="text">
-      <string>修正中心点</string>
      </property>
     </widget>
    </item>

@@ -1,11 +1,10 @@
 ﻿#include "UAV2022.h"
 #include "function.h"
 
-String name, name1;
+String name1, name2;
 Mat src1, src2;
-Mat outImage;
-Mat drone_pos;
 Mat diff_result;
+Mat greyFrame;
 
 
 UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量赋初值）
@@ -47,7 +46,8 @@ UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量
 
 	connect(ui.pBt_LoadImage, SIGNAL(clicked()), this, SLOT(LoadImage()));	// 点击ui.pBt_LoadImage时，进行LoadImage()操作
 	connect(ui.pBt_LoadImage_2, SIGNAL(clicked()), this, SLOT(LoadImage_2()));
-	connect(ui.pBt_Locate, SIGNAL(clicked()), this, SLOT(FirstLocate()));
+	connect(ui.pBt_Diff, SIGNAL(clicked()), this, SLOT(Diff()));
+	connect(ui.pBt_Locate, SIGNAL(clicked()), this, SLOT(Locate()));
 }
 
 
@@ -59,8 +59,8 @@ void UAV2022::LoadImage()
 
 	ui.label->setPixmap(pixmap);
 
-	name = ImagePath.toStdString();
-	src1 = imread(name);
+	name1 = ImagePath.toStdString();
+	src1 = imread(name1);
 	
 	/*QImage *img = new QImage;
 	img->load("./resources/数据源.jpg");
@@ -70,28 +70,117 @@ void UAV2022::LoadImage()
 }
 
 
+//void UAV2022::showImage(string path)
+//{
+//	QString qpath;
+//	qpath = QString::fromStdString(path);
+//	QPixmap pixmap(qpath);
+//	ui.label_2->setPixmap(pixmap);
+//	remove(path);
+//}
+
+
 void UAV2022::LoadImage_2()
 {
 	QString ImagePath;
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 
-	name1 = ImagePath.toStdString();
-	src2 = imread(name1);
+	name2 = ImagePath.toStdString();
+	src2 = imread(name2);
 }
 
-void UAV2022::FirstLocate()
+void UAV2022::Diff()
 {
-	Mat greyFrame;
-
-	diff_result.create(greyFrame.size(), greyFrame.type());
+	//diff_result.create(greyFrame.size(), greyFrame.type());
 	Diff2frame(src1, src2, diff_result);
-	imwrite("./resources/tmp.jpg", diff_result);
+	imwrite("./tmp/tmp.jpg", diff_result);
 
-	QPixmap pixmap("./resources/tmp.jpg");
+	QPixmap pixmap("./tmp/tmp.jpg");
 	ui.label_2->setPixmap(pixmap);
-
 	//system("rm ./resources/tmp.jpg");
-	remove("./resources/tmp.jpg");
+	remove("./tmp/tmp.jpg");
+}
+
+void UAV2022::Locate()
+{
+	int width = src1.cols;
+	int height = src1.rows;
+	int x11 = 0, x22 = 0, y11 = 0, y22 = 0;
+	int centerx = 0, centery = 0;
+	unsigned char *img0 = (unsigned char  *)malloc(width * height * sizeof(unsigned char));	// 使指针img0指向一块已分配的内存；sizeof()返回数据类型大小
+	unsigned char *img00 = (unsigned char  *)malloc(width * height * sizeof(unsigned char));
+	Mat diff_temp = diff_result.clone();
+	Mat image2;
+
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++)
+		{
+			img00[i*width + j] = diff_temp.at<uchar>(i, j);
+		}
+	vector<int> Single_RowPos, Single_ColPos;		// 用两个向量分别记录行、列投影时像素出现的范围
+	FindSingleTarget(img00, height, width, Single_RowPos, Single_ColPos);  //centerx是col号  ， centery是row号
+
+	int boxcenterx, boxcentery;
+	//单目标边界定位
+	//col
+	x11 = Single_ColPos.front();	// Single_ColPos.front()记录了第一次出现像素的列序号，即无人机最左边像素的横坐标
+	x22 = Single_ColPos.back();		// 类比上句，即无人机最右边像素的横坐标
+
+	//row
+	y11 = Single_RowPos.front();
+	y22 = Single_RowPos.back();
+
+	//框选区域的中心点
+
+	//针对单目标中心点进行微调
+	centerx = (x11 + x22) / 2 /*- 4*/;
+	centery = (y11 + y22) / 2;
+
+	boxcenterx = centerx;
+	boxcentery = centery;
+
+
+	cvtColor(src1, greyFrame, CV_BGR2GRAY);
+	cvtColor(greyFrame, image2, CV_GRAY2BGR);
+	
+	//标记中心点
+	for (int i = -2; i <= 2; i++)
+		for (int j = -2; j <= 2; j++)
+		{
+			image2.at<Vec3b>(centery + i, centerx + j)[0] = 255;
+			image2.at<Vec3b>(centery + i, centerx + j)[1] = 0;
+			image2.at<Vec3b>(centery + i, centerx + j)[2] = 0;
+		}
+
+	int boxwidth = abs(x11 - x22);//abs(x11 - x22) + 70;//70//126;//
+	int boxheight = abs(y11 - y22); //abs(y11 - y22) + 70;//70//121;//
+
+	for (int i = -boxwidth / 2 - 5; i < boxwidth / 2 + 5; i++)
+	{
+		image2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[0] = 0;
+		image2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[1] = 0;
+		image2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[2] = 255;
+
+		image2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[0] = 0;
+		image2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[1] = 0;
+		image2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[2] = 255;
+	}
+	for (int i = -boxheight / 2 - 5; i <= boxheight / 2 + 5; i++)
+	{
+		image2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[0] = 0;
+		image2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[1] = 0;
+		image2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[2] = 255;
+
+		image2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[0] = 0;
+		image2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[1] = 0;
+		image2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[2] = 255;
+	}
+
+	imwrite("./tmp/locate.jpg", image2);
+
+	QPixmap pixmap("./tmp/locate.jpg");
+	ui.label_2->setPixmap(pixmap);
+	remove("./tmp/locate.jpg");
 }
 
 

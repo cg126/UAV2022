@@ -27,6 +27,8 @@ public:
 		Move
 	};
 
+	//void showImage(string path);
+
 private:
 	//相关动作
 	int action;
@@ -50,7 +52,8 @@ private:
 public slots:
 	void LoadImage();
 	void LoadImage_2();
-	void FirstLocate();
+	void Diff();
+	void Locate();
 
 	//void ImageEnlarge();
 	//void ImageShrink();
