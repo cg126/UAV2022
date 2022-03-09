@@ -5,12 +5,12 @@ String name1, name2;
 Mat src1, src2;
 Mat diff_result;
 Mat greyFrame;
+int boxwidth = 0, boxheight = 0;
 
 
 UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量赋初值）
     : QWidget(parent)
 {
-	ratio = 1.0;
 	NowW = pixW = 320;
 	NowH = pixH = 240;
 
@@ -30,8 +30,6 @@ UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量
 	ui.label_5->setAlignment(Qt::AlignCenter);
 	ui.label_6->setAlignment(Qt::AlignCenter);
 
-
-	//Soure_pixmap.load("ironman.jpg");
 	ui.label->setText("Hello!");
 	//int w = Soure_pixmap.width();	// no use?
 	//Temp_pixmap = new QPixmap;
@@ -48,9 +46,35 @@ UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量
 	connect(ui.pBt_LoadImage_2, SIGNAL(clicked()), this, SLOT(LoadImage_2()));
 	connect(ui.pBt_Diff, SIGNAL(clicked()), this, SLOT(Diff()));
 	connect(ui.pBt_Locate, SIGNAL(clicked()), this, SLOT(Locate()));
+	connect(ui.pBt_PolarRange, SIGNAL(clicked()), this, SLOT(PolarRange()));
 }
 
 
+/*图像放大*/
+/*void UAV2022::ImageEnlarge()
+{
+	ratio += 0.2*ratio;
+	int NowW = ratio * pixW;
+	int NowH = ratio * pixH;
+
+	ui.label->setScaledContents(false);		// ?
+	Soure_pixmap.load("ironman.jpg");
+	Soure_pixmap = Soure_pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+	ui.label->setPixmap(Soure_pixmap);
+}*/
+
+
+/*显示图像*/
+//void UAV2022::showImage(string path)
+//{
+//	QString qpath;
+//	qpath = QString::fromStdString(path);
+//	QPixmap pixmap(qpath);
+//	ui.label_2->setPixmap(pixmap);
+//	remove(path);
+//}
+
+// 加载第一张图像
 void UAV2022::LoadImage()
 {
 	QString ImagePath;
@@ -70,16 +94,7 @@ void UAV2022::LoadImage()
 }
 
 
-//void UAV2022::showImage(string path)
-//{
-//	QString qpath;
-//	qpath = QString::fromStdString(path);
-//	QPixmap pixmap(qpath);
-//	ui.label_2->setPixmap(pixmap);
-//	remove(path);
-//}
-
-
+// 加载第二张图像
 void UAV2022::LoadImage_2()
 {
 	QString ImagePath;
@@ -88,6 +103,7 @@ void UAV2022::LoadImage_2()
 	name2 = ImagePath.toStdString();
 	src2 = imread(name2);
 }
+
 
 void UAV2022::Diff()
 {
@@ -101,16 +117,19 @@ void UAV2022::Diff()
 	remove("./tmp/tmp.jpg");
 }
 
+
+// 矩形框和中心点标定
 void UAV2022::Locate()
 {
 	int width = src1.cols;
 	int height = src1.rows;
 	int x11 = 0, x22 = 0, y11 = 0, y22 = 0;
-	int centerx = 0, centery = 0;
+	int boxcenterx = 0, boxcentery = 0;
+
 	unsigned char *img0 = (unsigned char  *)malloc(width * height * sizeof(unsigned char));	// 使指针img0指向一块已分配的内存；sizeof()返回数据类型大小
 	unsigned char *img00 = (unsigned char  *)malloc(width * height * sizeof(unsigned char));
 	Mat diff_temp = diff_result.clone();
-	Mat image2;
+
 
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
@@ -120,7 +139,7 @@ void UAV2022::Locate()
 	vector<int> Single_RowPos, Single_ColPos;		// 用两个向量分别记录行、列投影时像素出现的范围
 	FindSingleTarget(img00, height, width, Single_RowPos, Single_ColPos);  //centerx是col号  ， centery是row号
 
-	int boxcenterx, boxcentery;
+
 	//单目标边界定位
 	//col
 	x11 = Single_ColPos.front();	// Single_ColPos.front()记录了第一次出现像素的列序号，即无人机最左边像素的横坐标
@@ -139,7 +158,6 @@ void UAV2022::Locate()
 	boxcenterx = centerx;
 	boxcentery = centery;
 
-
 	cvtColor(src1, greyFrame, CV_BGR2GRAY);
 	cvtColor(greyFrame, image2, CV_GRAY2BGR);
 	
@@ -152,8 +170,8 @@ void UAV2022::Locate()
 			image2.at<Vec3b>(centery + i, centerx + j)[2] = 0;
 		}
 
-	int boxwidth = abs(x11 - x22);//abs(x11 - x22) + 70;//70//126;//
-	int boxheight = abs(y11 - y22); //abs(y11 - y22) + 70;//70//121;//
+	boxwidth = abs(x11 - x22);//abs(x11 - x22) + 70;//70//126;//
+	boxheight = abs(y11 - y22); //abs(y11 - y22) + 70;//70//121;//
 
 	for (int i = -boxwidth / 2 - 5; i < boxwidth / 2 + 5; i++)
 	{
@@ -179,22 +197,110 @@ void UAV2022::Locate()
 	imwrite("./tmp/locate.jpg", image2);
 
 	QPixmap pixmap("./tmp/locate.jpg");
-	ui.label_2->setPixmap(pixmap);
+	ui.label_3->setPixmap(pixmap);
 	remove("./tmp/locate.jpg");
 }
 
 
-//void UAV2022::ImageEnlarge()
-//{
-//	ratio += 0.2*ratio;
-//	int NowW = ratio * pixW;
-//	int NowH = ratio * pixH;
-//
-//	ui.label->setScaledContents(false);		// ?
-//	Soure_pixmap.load("ironman.jpg");
-//	Soure_pixmap = Soure_pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-//	ui.label->setPixmap(Soure_pixmap);
-//}
+// 极坐标范围展示
+void UAV2022::PolarRange()
+{
+	int ergodic = 1;
+	int **t = new int*[360 / ergodic];
+	int roi = floor(sqrt(boxwidth * boxwidth + boxheight * boxheight)) / 2;
+	int max = 0;
+	int x1 = 0, x2 = 0, y1 = 0, y2 = 0, temp = 0;
+	double the = 0, x0 = 0, y0 = 0, x = 0, y = 0;
+
+	for (int i = 0; i < 360 / ergodic; ++i)
+	{
+		t[i] = new int[roi];
+	}
+
+	// 变量th以360°遍历，标出极坐标转换范围
+	for (int th = 0; th < 360; th = th + ergodic)
+	{
+		for (int r = 1; r < roi; r++)  //在th角度上以距离r遍历
+		{
+
+			the = th * 3.14159 / 180;
+			x0 = r * cos(the);
+			y0 = r * sin(the);
+			x = x0 + centerx;
+			y = centery - y0;
+
+			x1 = floor(x);
+			x2 = ceil(x);
+			y1 = floor(y);
+			y2 = ceil(y);
+
+			/************2021/07/15 标出极坐标转换区域*********************/
+
+			if (r == roi - 1)
+			{
+				image2.at<Vec3b>(y1 + 1, x1 + 1)[0] = 0;
+				image2.at<Vec3b>(y1 + 1, x1 + 1)[1] = 0;
+				image2.at<Vec3b>(y1 + 1, x1 + 1)[2] = 255;
+			}
+			/************2021/07/15 标出极坐标转换区域*********************/
+
+
+			if (x1 == x2 || y1 == y2)
+			{
+				t[th / ergodic][r] = greyFrame.at<uchar>(y1, x1);
+			}
+			else
+			{
+				if (x > 0 && x < greyFrame.cols - 1 && y > 0 && y < greyFrame.rows - 1)
+				{
+					temp = (x2 - x)*(y2 - y)*greyFrame.at<uchar>(y1, x1) + (x - x1)*(y - y1)*greyFrame.at<uchar>(y2, x2) + (x2 - x)*(y - y1)*greyFrame.at<uchar>(y1, x2) + (x - x1)*(y2 - y)*greyFrame.at<uchar>(y2, x1);
+					t[th / ergodic][r] = temp;
+				}
+				else
+				{
+					if (x <= 0 | x > greyFrame.cols | y <= 0 | y >= greyFrame.rows)
+					{
+						int temp_x, temp_y;
+						if (x <= 0)
+						{
+							temp_x = 0;
+						}
+						else if (x > greyFrame.cols)
+						{
+							temp_x = greyFrame.cols - 1;
+						}
+						else
+						{
+							temp_x = floor(x);
+						}
+
+						if (y <= 0)
+						{
+							temp_y = 0;
+						}
+						else if (y > greyFrame.rows)
+						{
+							temp_y = greyFrame.rows - 1;
+						}
+						else
+						{
+							temp_y = floor(y);
+						}
+						t[th / ergodic][r] = greyFrame.at<uchar>(temp_y, temp_x);
+
+					}
+				}
+				// t[th/ergodic][r]=image.at<uchar>(y1,x1);  
+			}
+		}
+	}
+
+	imwrite("./tmp/PolarRange.jpg", image2);
+
+	QPixmap pixmap("./tmp/PolarRange.jpg");
+	ui.label_4->setPixmap(pixmap);
+	//system("rm ./resources/PolarRange.jpg");
+}
 
 
 void UAV2022::paintEvent(QPaintEvent *event)

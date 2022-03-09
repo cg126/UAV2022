@@ -35,11 +35,15 @@ private:
 	//图片原始宽高
 	int pixW;
 	int pixH;
-	float ratio;		// 比例
 
 	//图片的目前宽高
 	int NowW;
 	int NowH;
+
+	// 矩形框中心点
+	int centerx = 0, centery = 0;
+
+	Mat image2;
 
 	QRect Paint;		//绘画区域
 	QLabel label;
@@ -54,10 +58,10 @@ public slots:
 	void LoadImage_2();
 	void Diff();
 	void Locate();
+	void PolarRange();
 
 	//void ImageEnlarge();
 	//void ImageShrink();
-
 
 private:
     Ui::UAV2022Class ui;
