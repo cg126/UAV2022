@@ -104,6 +104,13 @@
      </property>
     </widget>
    </item>
+   <item row="9" column="1">
+    <widget class="QPushButton" name="pBt_Polar">
+     <property name="text">
+      <string>极坐标系</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

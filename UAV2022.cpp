@@ -47,6 +47,7 @@ UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量
 	connect(ui.pBt_Diff, SIGNAL(clicked()), this, SLOT(Diff()));
 	connect(ui.pBt_Locate, SIGNAL(clicked()), this, SLOT(Locate()));
 	connect(ui.pBt_PolarRange, SIGNAL(clicked()), this, SLOT(PolarRange()));
+	connect(ui.pBt_Polar, SIGNAL(clicked()), this, SLOT(Polar()));
 }
 
 
@@ -205,9 +206,8 @@ void UAV2022::Locate()
 // 极坐标范围展示
 void UAV2022::PolarRange()
 {
-	int ergodic = 1;
-	int **t = new int*[360 / ergodic];
-	int roi = floor(sqrt(boxwidth * boxwidth + boxheight * boxheight)) / 2;
+	t = new int*[360 / ergodic];
+	roi = floor(sqrt(boxwidth * boxwidth + boxheight * boxheight)) / 2;
 	int max = 0;
 	int x1 = 0, x2 = 0, y1 = 0, y2 = 0, temp = 0;
 	double the = 0, x0 = 0, y0 = 0, x = 0, y = 0;
@@ -299,7 +299,25 @@ void UAV2022::PolarRange()
 
 	QPixmap pixmap("./tmp/PolarRange.jpg");
 	ui.label_4->setPixmap(pixmap);
-	//system("rm ./resources/PolarRange.jpg");
+	//system("rm ./tmp/PolarRange.jpg");
+}
+
+void UAV2022::Polar()
+{
+	Mat imgg;	// 存储极坐标图像
+	cv::resize(greyFrame, imgg, Size(360 / ergodic, roi));
+	for (int i = 0; i < 360 / ergodic; i = i++)
+	{
+		for (int j = 0; j < roi; j++)
+		{
+			imgg.at<uchar>(j, i) = t[i][j];
+		}
+	}
+
+	imwrite("./tmp/polar.jpg", imgg);
+	QPixmap pixmap("./tmp/Polar.jpg");
+	ui.label_4->setPixmap(pixmap);
+	//system("rm ./tmp/Polar.jpg");
 }
 
 

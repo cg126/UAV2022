@@ -42,6 +42,8 @@ private:
 
 	// 矩形框中心点
 	int centerx = 0, centery = 0;
+	int ergodic = 1, roi = 0;
+	int **t;
 
 	Mat image2;
 
@@ -59,6 +61,7 @@ public slots:
 	void Diff();
 	void Locate();
 	void PolarRange();
+	void Polar();
 
 	//void ImageEnlarge();
 	//void ImageShrink();
