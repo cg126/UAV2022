@@ -15,20 +15,12 @@ UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量�
 	NowH = pixH = 240;
 
 	ui.setupUi(this);
-	//ui.label->setScaledContents(true);
-	//ui.label_2->setScaledContents(true);
-	//ui.label_3->setScaledContents(true);
+	ui.label->setScaledContents(true);
+	ui.label_2->setScaledContents(true);
+	ui.label_3->setScaledContents(true);
 	//ui.label_4->setScaledContents(true);
 	//ui.label_5->setScaledContents(true);
 	//ui.label_6->setScaledContents(true);
-
-	/*设置QLabel文本框对齐方式*/
-	//ui.label->setAlignment(Qt::AlignCenter);
-	//ui.label_2->setAlignment(Qt::AlignCenter);
-	//ui.label_3->setAlignment(Qt::AlignCenter);
-	//ui.label_4->setAlignment(Qt::AlignCenter);
-	//ui.label_5->setAlignment(Qt::AlignCenter);
-	//ui.label_6->setAlignment(Qt::AlignCenter);
 
 	ui.label->setText("Hello!");
 	//int w = Soure_pixmap.width();	// no use?
@@ -49,6 +41,7 @@ UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量�
 	connect(ui.pBt_PolarRange, SIGNAL(clicked()), this, SLOT(PolarRange()));
 	connect(ui.pBt_Polar, SIGNAL(clicked()), this, SLOT(Polar()));
 	connect(ui.pBt_Edge, SIGNAL(clicked()), this, SLOT(Edge()));
+	connect(ui.pBt_Mark, SIGNAL(clicked()), this, SLOT(Mark()));
 }
 
 
@@ -80,13 +73,14 @@ UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量�
 void UAV2022::LoadImage()
 {
 	QString ImagePath;
+
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 	QPixmap pixmap(ImagePath);
-
 	ui.label->setPixmap(pixmap);
 
 	name1 = ImagePath.toStdString();
-	src1 = imread(name1);
+	outImage = src1 = imread(name1);
+	
 	
 	/*QImage *img = new QImage;
 	img->load("./resources/数据源.jpg");
@@ -389,7 +383,7 @@ void UAV2022::Edge()
 		outfile << i << "      " << 480 - y_pixel[i] << endl;
 	}
 	// 记录各角度对应边界数据
-	ofstream outfile1(".\\新数据中间结果\\边界数据.txt");
+	ofstream outfile1("./tmp/边界数据.txt");
 	for (int i = 0; i < 360 / ergodic; i++)
 	{
 		outfile1 << i + 20 << "	" << m[i + 20] << endl;
@@ -417,39 +411,45 @@ void UAV2022::Edge()
 }
 
 
+// 要害点标记
+void UAV2022::Mark()
+{
+	cir(TH, n, ergodic);   //目标边缘曲率
+
+	vector<int> cur = Max_Cur(8, TH);
+	vector<row_roi> p_target = FindTarget(cur, n);
+	//if (p_target.size() == 0)
+	//	continue;
+	
+	// 标记机翼&起落架
+	for (int m = 0; m < p_target.size(); m++)
+	{
+
+		int point_x, point_y;
+		point_x = centerx + p_target[m].roi * (cos(p_target[m].angle * 3.14159 / 180)); //col
+		point_y = centery - p_target[m].roi * (sin(p_target[m].angle * 3.14159 / 180));
+
+		//point_x += 2;
+		//point_y -= 4;
+
+		line(outImage, Point(point_x - 10, point_y), Point(point_x + 10, point_y), Scalar(0, 0, 255), 1, CV_AA);
+		line(outImage, Point(point_x, point_y - 10), Point(point_x, point_y + 10), Scalar(0, 0, 255), 1, CV_AA);
+	}
+
+	// 标记中心
+	line(outImage, Point(centerx - 10, centery), Point(centerx + 10, centery), Scalar(255, 0, 0), 1, CV_AA);
+	line(outImage, Point(centerx, centery - 10), Point(centerx, centery + 10), Scalar(255, 0, 0), 1, CV_AA);
+
+	imwrite("./tmp/result.png", outImage);
+
+	QPixmap pixmap("./tmp/result.png");
+	ui.label_5->setPixmap(pixmap);
+}
+
+
 void UAV2022::paintEvent(QPaintEvent *event)
 {
 	QPainter painter(this);
-
-	//int NowW = ratio *pixW;
-	//int NowH = ratio *pixH;
-
-	//if (action == Drone2021::Amplification)           //缩小
-	//{
-	//	ratio -= 0.1*ratio;
-	//	if (ratio < 0.18)
-	//		ratio = 0.1;
-
-
-	//}
-	//else  if (action == Drone2021::Shrink)           //放大
-	//{
-
-	//	ratio += 0.1*ratio;
-	//	if (ratio > 4.5)
-	//		ratio = 5.000;
-
-
-	//}
-	//if (action == Drone2021::Amplification || action == Drone2021::Shrink)      //更新图片
-	//{
-	//	NowW = ratio *pixW;
-	//	NowH = ratio *pixH;
-	//	Soure_pixmap.load("D:/tu/test2.jpg");                 //重新装载,因为之前的图片已经被缩放过
-	//	Soure_pixmap = Soure_pixmap.scaled(NowW, NowH, Qt::KeepAspectRatio);
-	//	action = Drone2021::None;
-
-	//}
 
 	if (action == UAV2022::Move)                    //移动
 	{

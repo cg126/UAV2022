@@ -26,14 +26,15 @@ void quickFindTarget(unsigned char *img0, int height, int width, int *centerx, i
 void FindSingleTarget(unsigned char *img0, int height, int width, vector<int> &Single_RowPos, vector<int> &Single_ColPos);
 void quickFindTarget1(unsigned char *img0, int height, int width, int *centerx, int *centery, int *greyaverage);
 void quickFindTarget2(Mat&src, int height, int width, int *centerx, int *centery, int *greyaverage);
-void KittlerMinError(const Mat& inimg, Mat& outimg, int width, int height, int *th);
+void KittlerMinError(const Mat& inimg, Mat& outimg, int width, int height, int *
+);
 int Otsu(Mat& src);
 void MedFilterImage(int ergodic, int *m, int *n);
-void cir();
+void cir(double *TH, int *n, int ergodic);
 void CirR(double*Px, double*Py, int changdu, double &AAAA, double &BBBB, double &RRRR);
 void mid(int k, int*max);
-vector<int> Max_Cur(int n);
-vector<row_roi> FindTarget(vector<int> &cur);
+vector<int> Max_Cur(int n, double *TH);
+vector<row_roi> FindTarget(vector<int> &cur, int *n);
 static int frameNum = 0;
 
 //2021//07//22

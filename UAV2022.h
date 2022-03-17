@@ -42,6 +42,9 @@ private:
 
 	int m[401] = { 0 };
 	int n[401] = { 0 };
+	double TH[401] = { 0 };
+	double TH_MID[401] = { 0 };
+	double TH_MIDD[401] = { 0 };
 
 	// 矩形框中心点
 	int centerx = 0, centery = 0;
@@ -51,6 +54,7 @@ private:
 	Mat image2;
 	Mat imgg;	// 存储极坐标图像
 	Mat img1;	// 存储极坐标图像二值化结果
+	Mat outImage;
 
 	QRect Paint;		//绘画区域
 	QLabel label;
@@ -68,6 +72,7 @@ public slots:
 	void PolarRange();
 	void Polar();
 	void Edge();
+	void Mark();
 
 	//void ImageEnlarge();
 	//void ImageShrink();

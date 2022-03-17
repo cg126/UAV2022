@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1029</width>
-    <height>592</height>
+    <height>709</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>20</x>
      <y>20</y>
      <width>1001</width>
-     <height>561</height>
+     <height>681</height>
     </rect>
    </property>
    <widget class="QLabel" name="label_4">
@@ -27,7 +27,7 @@
      <rect>
       <x>10</x>
       <y>260</y>
-      <width>661</width>
+      <width>640</width>
       <height>240</height>
      </rect>
     </property>
@@ -65,13 +65,20 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>320</y>
+      <x>390</x>
+      <y>510</y>
       <width>261</width>
       <height>151</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="6" column="0" colspan="2">
+      <widget class="QPushButton" name="pBt_Edge">
+       <property name="text">
+        <string>边缘提取</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="pBt_LoadImage_2">
        <property name="text">
@@ -79,10 +86,24 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0" colspan="2">
-      <widget class="QPushButton" name="pBt_Edge">
+     <item row="4" column="0">
+      <widget class="QPushButton" name="pBt_PolarRange">
        <property name="text">
-        <string>边缘提取</string>
+        <string>极坐标范围显示</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="pBt_Locate">
+       <property name="text">
+        <string>矩形框和中心点标定</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="pBt_Polar">
+       <property name="text">
+        <string>极坐标图像</string>
        </property>
       </widget>
      </item>
@@ -100,24 +121,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="pBt_Locate">
+     <item row="7" column="0" colspan="2">
+      <widget class="QPushButton" name="pBt_Mark">
        <property name="text">
-        <string>矩形框和中心点标定</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QPushButton" name="pBt_PolarRange">
-       <property name="text">
-        <string>极坐标范围显示</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QPushButton" name="pBt_Polar">
-       <property name="text">
-        <string>极坐标图像</string>
+        <string>要害点标记</string>
        </property>
       </widget>
      </item>
@@ -215,6 +222,37 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>260</y>
+      <width>320</width>
+      <height>240</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>320</width>
+      <height>240</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>320</width>
+      <height>240</height>
+     </size>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
  </widget>

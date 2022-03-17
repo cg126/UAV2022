@@ -166,6 +166,241 @@ void MedFilterImage(int ergodic, int *m, int *n)
 	}
 }
 
+
+void cir(double *TH, int *n, int ergodic)
+{
+	double AAAA = 0;
+	double BBBB = 0;
+	double RRRR = 0;
+	double x[7] = { 0 };
+	double y[7] = { 0 };
+	double *Px = x;
+	double *Py = y;
+	//int RR[360]={0};
+	ofstream outfile;
+	outfile.open(".\\tmp\\曲率.txt");
+	for (int ii = 20; ii < ((360 / ergodic) + 20); ii++)
+	{
+		x[0] = ii - 6;
+		x[1] = ii - 3;
+		x[2] = ii;
+		x[3] = ii + 3;
+		x[4] = ii + 6;
+
+		y[0] = n[ii - 6];
+		y[1] = n[ii - 3];
+		y[2] = n[ii];
+		y[3] = n[ii + 3];
+		y[4] = n[ii + 6];
+		CirR(Px, Py, 5, AAAA, BBBB, RRRR);
+
+		if (RRRR == 0)
+		{
+			TH[ii - 20] = 0;
+			outfile << 0 << endl;
+			//cout << "第" << ii - 20 << "度：" << 0 << endl;
+		}
+		else
+		{
+			TH[ii - 20] = 1 / RRRR;
+			outfile << 1 / RRRR << endl;
+			//cout << "第" << ii - 20 << "度：" << 1 / RRRR << endl;
+		}
+		//
+		//  cout<<"第"<<ii-20<<"度："<<BBBB<<endl;
+	}
+	outfile.close();
+}
+
+
+void CirR(double * Px, double * Py, int changdu, double & AAAA, double & BBBB, double & RRRR)
+{
+	double X1, X2, X3, Y1, Y2, Y3;
+	double a, b，r;//圆心坐标半径
+	double **shuzu = new double*[3];
+	for (int i = 0; i < 3; ++i)
+	{
+		shuzu[i] = new double[changdu];
+	}
+
+	int NUM = 0;
+	for (NUM = 0; NUM < changdu; NUM++)
+	{
+		shuzu[0][NUM] = NUM;
+		shuzu[1][NUM] = Px[NUM];
+		shuzu[2][NUM] = Py[NUM];
+
+	}
+	int Max_number = 2; int number;
+	double count[3] = { 0 };
+	double zuiyoujie[4] = { 0 };
+	zuiyoujie[3] = 100;
+	int k1 = 0;
+	int k2 = 0;
+	int k3 = 0;
+	double x = 0;
+	double y = 0;
+	double point, distance;
+	double aa, bb, rr;
+	double distancesum;
+	for (k1 = 0; k1 < changdu - 2; k1++)
+	{
+		for (k2 = k1 + 1; k2 < changdu - 1; k2++)
+		{
+			for (k3 = k2 + 1; k3 < changdu; k3++)
+			{
+				distancesum = 0;
+				X1 = shuzu[1][k1];
+				Y1 = shuzu[2][k1];
+
+				X2 = shuzu[1][k2];
+				Y2 = shuzu[2][k2];
+
+				X3 = shuzu[1][k3];
+				Y3 = shuzu[2][k3];
+				if (((X2 - X1)*(Y3 - Y1) - (X3 - X1)*(Y2 - Y1)) != 0)
+				{
+					double  a = ((X2*X2 + Y2 * Y2 - (X1*X1 + Y1 * Y1)) * 2 * (Y3 - Y1) - (X3*X3 + Y3 * Y3 - (X1*X1 + Y1 * Y1)) * 2 * (Y2 - Y1)) / (4 * ((X2 - X1)*(Y3 - Y1) - (X3 - X1)*(Y2 - Y1)));
+					double  b = (2 * (X2 - X1)*(X3*X3 + Y3 * Y3 - (X1*X1 + Y1 * Y1)) - 2 * (X3 - X1)*(X2*X2 + Y2 * Y2 - (X1*X1 + Y1 * Y1))) / (4 * ((X2 - X1)*(Y3 - Y1) - (X3 - X1)*(Y2 - Y1)));
+					double  r = sqrt((double)(X1 - a)*(X1 - a) + (double)(Y1 - b)*(Y1 - b));
+					//   double  r = (double)((X1-a)*(X1-a)+(Y1-b)*(Y1-b));
+					count[0] = a;
+					count[1] = b;
+					count[2] = r;
+					//  cout<<mmm<<":"<<r<<endl;
+					//    mmm++;
+				}
+				else
+				{
+					count[2] = 0;
+					// cout<<mmm<<":"<<count[2]<<endl;
+					//  mmm++;
+					continue;
+				}
+				//////////////
+				for (int i = 0; i < changdu; i++)
+				{
+					aa = count[0];
+					bb = count[1];
+					rr = count[2];
+					x = shuzu[1][i];
+					y = shuzu[2][i];
+					point = (double)sqrt((x - aa)*(x - aa) + (y - bb)*(y - bb));
+					distance = abs(point - rr);
+					distancesum = distancesum + distance;
+				}
+				if (distancesum < zuiyoujie[3])
+				{
+					zuiyoujie[0] = rr;
+					zuiyoujie[1] = aa;
+					zuiyoujie[2] = bb;
+					zuiyoujie[3] = distancesum;
+				}
+			}
+		}
+	}
+
+	AAAA = zuiyoujie[1];
+	BBBB = zuiyoujie[2];
+	RRRR = zuiyoujie[0];
+	// RRRR=sqrt(RRRR);
+	for (int i = 0; i < 3; ++i)
+		delete[] shuzu[i];
+	delete[] shuzu;
+}
+
+
+vector<int> Max_Cur(int n, double *TH)
+{
+	vector<int> cur;
+	int count = n;
+	double Temp_TH[401];
+	for (int i = 0; i < 401; i++)
+	{
+		Temp_TH[i] = TH[i];
+	}
+
+	while (count)
+	{
+		double maxcur = Temp_TH[0];
+		int index = 0;
+		for (int i = 0; i < 360; i++)
+		{
+			if (maxcur < Temp_TH[i])
+			{
+				maxcur = Temp_TH[i];
+				index = i;
+			}
+		}
+		cur.push_back(index);
+		if (index >= 5)
+		{
+			Temp_TH[index - 5] = Temp_TH[index - 4] = Temp_TH[index - 3] = Temp_TH[index - 2] = Temp_TH[index - 1] = Temp_TH[index] = 0;
+			Temp_TH[index + 5] = Temp_TH[index + 4] = Temp_TH[index + 3] = Temp_TH[index + 2] = Temp_TH[index + 1] = 0;
+		}
+		else if (index == 4)
+		{
+			Temp_TH[index - 4] = Temp_TH[index - 3] = Temp_TH[index - 2] = Temp_TH[index - 1] = Temp_TH[index] = 0;
+			Temp_TH[index + 5] = Temp_TH[index + 4] = Temp_TH[index + 3] = Temp_TH[index + 2] = Temp_TH[index + 1] = 0;
+		}
+		else if (index == 3)
+		{
+			Temp_TH[index - 3] = Temp_TH[index - 2] = Temp_TH[index - 1] = Temp_TH[index] = 0;
+			Temp_TH[index + 5] = Temp_TH[index + 4] = Temp_TH[index + 3] = Temp_TH[index + 2] = Temp_TH[index + 1] = 0;
+		}
+		else if (index == 2)
+		{
+			Temp_TH[index - 2] = Temp_TH[index - 1] = Temp_TH[index] = 0;
+			Temp_TH[index + 5] = Temp_TH[index + 4] = Temp_TH[index + 3] = Temp_TH[index + 2] = Temp_TH[index + 1] = 0;
+		}
+		else if (index == 1)
+		{
+			Temp_TH[index - 1] = Temp_TH[index] = 0;
+			Temp_TH[index + 5] = Temp_TH[index + 4] = Temp_TH[index + 3] = Temp_TH[index + 2] = Temp_TH[index + 1] = 0;
+		}
+		else
+		{
+			Temp_TH[index + 5] = Temp_TH[index + 4] = Temp_TH[index + 3] = Temp_TH[index + 2] = Temp_TH[index + 1] = Temp_TH[index] = 0;
+		}
+		count--;
+	}
+
+	sort(cur.begin(), cur.end(), less<int>());
+	
+	return cur;
+	//return vector<int>();
+}
+
+
+vector<row_roi> FindTarget(vector<int>& cur, int *n)
+{
+	vector<row_roi> target_point;
+	int sum = 0;
+	int avg = 0;
+	for (int i = 0; i < cur.size(); i++)
+	{
+		sum += n[cur[i] + 20];
+	}
+
+	avg = sum / cur.size();
+
+	for (int i = 0; i < cur.size(); i++)
+	{
+
+		if (n[cur[i] + 20] > avg)
+		{
+			row_roi temp;
+			temp.angle = cur[i];
+			temp.roi = n[cur[i] + 20];
+			target_point.push_back(temp);
+		}
+	}
+
+	return target_point;
+	//return vector<row_roi>();
+}
+
+
 void Diff2frame(Mat &mat1, Mat &mat2, Mat &result)
 {
 	int width = mat1.cols;
