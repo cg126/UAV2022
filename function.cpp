@@ -1,4 +1,5 @@
 #include "function.h"
+#include "UAV2022.h"
 
 struct MyPoint11 {
 	int x;
@@ -147,6 +148,22 @@ int Otsu(Mat& src)
 
 	//printf("threshold = %d\n", threshold);
 	return threshold;
+}
+
+void MedFilterImage(int ergodic, int *m, int *n)
+{
+	for (int i = 20; i < 360 / ergodic + 20; i++)
+	{
+		n[i] = (m[i - 1] + m[i] + m[i + 1] + m[i + 2] + m[i - 2] + m[i + 3] + m[i - 3] + m[i + 4] + m[i - 4] + m[i + 5] + m[i - 5]) / 11;
+		// n[i]=(m[i-1]+m[i]+m[i+1]+m[i+2]+m[i-2]+m[i+3]+m[i-3])/7;
+		//n[i]=(m[i-1]+m[i]+m[i+1])/3;
+		//n[i] = (m[i - 1] + m[i] + m[i + 1] + m[i + 2] + m[i - 2] + m[i + 3] + m[i - 3] + m[i + 4] + m[i - 4] ) / 9;
+	}
+	for (int i = 0; i < 20; i++)
+	{
+		n[(360 / ergodic + 20) + i] = n[20 + i];
+		n[0 + i] = n[ergodic + i];
+	}
 }
 
 void Diff2frame(Mat &mat1, Mat &mat2, Mat &result)

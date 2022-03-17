@@ -8,7 +8,7 @@ Mat greyFrame;
 int boxwidth = 0, boxheight = 0;
 
 
-UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量赋初值）
+UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量赋初值）
     : QWidget(parent)
 {
 	NowW = pixW = 320;
@@ -22,13 +22,13 @@ UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量
 	//ui.label_5->setScaledContents(true);
 	//ui.label_6->setScaledContents(true);
 
-	// 设置QLabel文本框对齐方式
-	ui.label->setAlignment(Qt::AlignCenter);
-	ui.label_2->setAlignment(Qt::AlignCenter);
-	ui.label_3->setAlignment(Qt::AlignCenter);
-	ui.label_4->setAlignment(Qt::AlignCenter);
-	ui.label_5->setAlignment(Qt::AlignCenter);
-	ui.label_6->setAlignment(Qt::AlignCenter);
+	/*设置QLabel文本框对齐方式*/
+	//ui.label->setAlignment(Qt::AlignCenter);
+	//ui.label_2->setAlignment(Qt::AlignCenter);
+	//ui.label_3->setAlignment(Qt::AlignCenter);
+	//ui.label_4->setAlignment(Qt::AlignCenter);
+	//ui.label_5->setAlignment(Qt::AlignCenter);
+	//ui.label_6->setAlignment(Qt::AlignCenter);
 
 	ui.label->setText("Hello!");
 	//int w = Soure_pixmap.width();	// no use?
@@ -48,6 +48,7 @@ UAV2022::UAV2022(QWidget *parent)		// 定义构造函数（用于为成员变量
 	connect(ui.pBt_Locate, SIGNAL(clicked()), this, SLOT(Locate()));
 	connect(ui.pBt_PolarRange, SIGNAL(clicked()), this, SLOT(PolarRange()));
 	connect(ui.pBt_Polar, SIGNAL(clicked()), this, SLOT(Polar()));
+	connect(ui.pBt_Edge, SIGNAL(clicked()), this, SLOT(Edge()));
 }
 
 
@@ -103,6 +104,9 @@ void UAV2022::LoadImage_2()
 
 	name2 = ImagePath.toStdString();
 	src2 = imread(name2);
+
+	QPixmap pixmap(ImagePath);
+	ui.label_2->setPixmap(pixmap);
 }
 
 
@@ -302,9 +306,10 @@ void UAV2022::PolarRange()
 	//system("rm ./tmp/PolarRange.jpg");
 }
 
+
+// 极坐标图像
 void UAV2022::Polar()
 {
-	Mat imgg;	// 存储极坐标图像
 	cv::resize(greyFrame, imgg, Size(360 / ergodic, roi));
 	for (int i = 0; i < 360 / ergodic; i = i++)
 	{
@@ -318,6 +323,97 @@ void UAV2022::Polar()
 	QPixmap pixmap("./tmp/Polar.jpg");
 	ui.label_4->setPixmap(pixmap);
 	//system("rm ./tmp/Polar.jpg");
+}
+
+
+// 边缘提取
+void UAV2022::Edge()
+{
+	img1.create(imgg.size(), imgg.type());
+	int thre = Otsu(imgg);
+	threshold(imgg, img1, 220, 255, CV_THRESH_BINARY);
+
+	for (int th = 0; th < 360 / ergodic; th = th++)
+	{
+		for (int r = roi - 1; r > 0; r--)
+		{
+			if (img1.at<uchar>(r, th) == 255)
+			{
+				m[th + 20] = r;
+				break;
+			}
+		}
+	}
+	for (int i = 0; i < 20; i++)
+	{
+		m[(360 / ergodic) + 20 + i] = m[20 + i];
+		m[0 + i] = m[360 / ergodic + i];
+	}
+
+	Mat img22;	// 极坐标边缘提取
+	img22.create(imgg.size(), imgg.type());
+	for (int i = 0; i < 360 / ergodic; i++)
+	{
+		for (int j = 1; j < roi; j++)
+		{
+			img22.at<uchar>(j, i) = 0;
+		}
+	}
+	for (int i = 0; i < 360 / ergodic; i++)
+	{
+		img22.at<uchar>(m[i + 20], i) = 255;
+	}
+
+	Mat img2;	// 拟合结果
+	img2.create(imgg.size(), imgg.type());
+
+
+	// 各角度对应边界的直角坐标
+	vector<int> y_pixel;
+	double angle1;
+	for (int i = 0; i < 360; i++)
+	{
+		angle1 = i * 3.14159 / 180;
+		double xx0, yy0;
+		int xx1, yy1;
+		xx0 = centerx + m[i + 20] * cos(angle1);
+		yy0 = centery - m[i + 20] * sin(angle1);
+
+		yy1 = ceil(yy0);
+		y_pixel.push_back(yy1);
+	}
+
+	ofstream outfile("./tmp/边界y坐标取反.txt");
+	for (int i = 0; i < y_pixel.size(); i++)
+	{
+		outfile << i << "      " << 480 - y_pixel[i] << endl;
+	}
+	// 记录各角度对应边界数据
+	ofstream outfile1(".\\新数据中间结果\\边界数据.txt");
+	for (int i = 0; i < 360 / ergodic; i++)
+	{
+		outfile1 << i + 20 << "	" << m[i + 20] << endl;
+	}
+
+	MedFilterImage(ergodic, m, n);		// 边缘信息均值滤波
+
+	for (int i = 0; i < 360 / ergodic; i++)
+	{
+		for (int j = 1; j < roi; j++)
+		{
+			img2.at<uchar>(j, i) = 0;
+		}
+
+	}
+	for (int i = 0; i < 360 / ergodic; i++)
+	{
+		img2.at<uchar>(n[i + 20], i) = 255;
+	}
+
+	imwrite("./tmp/Edge.jpg", img2);
+	QPixmap pixmap("./tmp/Edge.jpg");
+	ui.label_4->setPixmap(pixmap);
+	//system("rm ./tmp/Edge.jpg");
 }
 
 

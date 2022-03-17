@@ -40,12 +40,17 @@ private:
 	int NowW;
 	int NowH;
 
+	int m[401] = { 0 };
+	int n[401] = { 0 };
+
 	// 矩形框中心点
 	int centerx = 0, centery = 0;
 	int ergodic = 1, roi = 0;
 	int **t;
 
 	Mat image2;
+	Mat imgg;	// 存储极坐标图像
+	Mat img1;	// 存储极坐标图像二值化结果
 
 	QRect Paint;		//绘画区域
 	QLabel label;
@@ -62,6 +67,7 @@ public slots:
 	void Locate();
 	void PolarRange();
 	void Polar();
+	void Edge();
 
 	//void ImageEnlarge();
 	//void ImageShrink();

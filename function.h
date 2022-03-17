@@ -28,7 +28,7 @@ void quickFindTarget1(unsigned char *img0, int height, int width, int *centerx, 
 void quickFindTarget2(Mat&src, int height, int width, int *centerx, int *centery, int *greyaverage);
 void KittlerMinError(const Mat& inimg, Mat& outimg, int width, int height, int *th);
 int Otsu(Mat& src);
-void MedFilterImage();
+void MedFilterImage(int ergodic, int *m, int *n);
 void cir();
 void CirR(double*Px, double*Py, int changdu, double &AAAA, double &BBBB, double &RRRR);
 void mid(int k, int*max);
