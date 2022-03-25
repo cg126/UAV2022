@@ -1,5 +1,6 @@
 ﻿#include "UAV2022.h"
 #include "function.h"
+#include "MyLabel.h"
 
 String name1, name2;
 Mat src1, src2;
@@ -23,16 +24,6 @@ UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量�
 	//ui.label_6->setScaledContents(true);
 
 	ui.label->setText("Hello!");
-	//int w = Soure_pixmap.width();	// no use?
-	//Temp_pixmap = new QPixmap;
-	//Temp_pixmap->load("ironman.jpg");
-	//Soure_pixmap = Soure_pixmap.scaled(pixW, pixH, Qt::IgnoreAspectRatio);	// ?
-	//ui.label->setPixmap(*Temp_pixmap);
-	/*ui.label_2->setPixmap(Soure_pixmap);
-	ui.label_3->setPixmap(Soure_pixmap);
-	ui.label_4->setPixmap(Soure_pixmap);
-	ui.label_5->setPixmap(Soure_pixmap);
-	ui.label_6->setPixmap(Soure_pixmap);*/
 
 	connect(ui.pBt_LoadImage, SIGNAL(clicked()), this, SLOT(LoadImage()));	// 点击ui.pBt_LoadImage时，进行LoadImage()操作
 	connect(ui.pBt_LoadImage_2, SIGNAL(clicked()), this, SLOT(LoadImage_2()));
@@ -45,46 +36,17 @@ UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量�
 }
 
 
-/*图像放大*/
-/*void UAV2022::ImageEnlarge()
-{
-	ratio += 0.2*ratio;
-	int NowW = ratio * pixW;
-	int NowH = ratio * pixH;
-
-	ui.label->setScaledContents(false);		// ?
-	Soure_pixmap.load("ironman.jpg");
-	Soure_pixmap = Soure_pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-	ui.label->setPixmap(Soure_pixmap);
-}*/
-
-
-/*显示图像*/
-//void UAV2022::showImage(string path)
-//{
-//	QString qpath;
-//	qpath = QString::fromStdString(path);
-//	QPixmap pixmap(qpath);
-//	ui.label_2->setPixmap(pixmap);
-//	remove(path);
-//}
-
 // 加载第一张图像
 void UAV2022::LoadImage()
 {
 	QString ImagePath;
 
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
-	QPixmap pixmap(ImagePath);
-	ui.label->setPixmap(pixmap);
+
+	ui.label->showImage(ImagePath);
 
 	name1 = ImagePath.toStdString();
 	outImage = src1 = imread(name1);
-	
-	
-	/*QImage *img = new QImage;
-	img->load("./resources/数据源.jpg");
-	ui.label->setPixmap(QPixmap::fromImage(*img));*/	// didn't work
 
 	//ui.label->update();		// ？
 }
@@ -99,8 +61,9 @@ void UAV2022::LoadImage_2()
 	name2 = ImagePath.toStdString();
 	src2 = imread(name2);
 
-	QPixmap pixmap(ImagePath);
-	ui.label_2->setPixmap(pixmap);
+	ui.label_2->showImage(ImagePath);
+	/*QPixmap pixmap(ImagePath);
+	ui.label_2->setPixmap(pixmap);*/
 }
 
 
@@ -110,8 +73,9 @@ void UAV2022::Diff()
 	Diff2frame(src1, src2, diff_result);
 	imwrite("./tmp/tmp.jpg", diff_result);
 
-	QPixmap pixmap("./tmp/tmp.jpg");
-	ui.label_2->setPixmap(pixmap);
+	ui.label_3->showImage("./tmp/tmp.jpg");
+	/*QPixmap pixmap("./tmp/tmp.jpg");
+	ui.label_2->setPixmap(pixmap);*/
 	//system("rm ./resources/tmp.jpg");
 	remove("./tmp/tmp.jpg");
 }
@@ -195,8 +159,9 @@ void UAV2022::Locate()
 
 	imwrite("./tmp/locate.jpg", image2);
 
-	QPixmap pixmap("./tmp/locate.jpg");
-	ui.label_3->setPixmap(pixmap);
+	ui.label_3->showImage("./tmp/locate.jpg");
+	/*QPixmap pixmap("./tmp/locate.jpg");
+	ui.label_3->setPixmap(pixmap);*/
 	remove("./tmp/locate.jpg");
 }
 
@@ -295,9 +260,11 @@ void UAV2022::PolarRange()
 
 	imwrite("./tmp/PolarRange.jpg", image2);
 
-	QPixmap pixmap("./tmp/PolarRange.jpg");
-	ui.label_4->setPixmap(pixmap);
+	ui.label_3->showImage("./tmp/PolarRange.jpg");
+	/*QPixmap pixmap("./tmp/PolarRange.jpg");
+	ui.label_3->setPixmap(pixmap);*/
 	//system("rm ./tmp/PolarRange.jpg");
+	remove("./tmp/PolarRange.jpg");
 }
 
 
