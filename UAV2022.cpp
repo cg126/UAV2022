@@ -12,20 +12,21 @@ int boxwidth = 0, boxheight = 0;
 UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量赋初值）
     : QWidget(parent)
 {
-	NowW = pixW = 320;
-	NowH = pixH = 240;
-
 	ui.setupUi(this);
-	ui.label->setScaledContents(true);
-	ui.label_2->setScaledContents(true);
-	ui.label_3->setScaledContents(true);
-	//ui.label_4->setScaledContents(true);
-	//ui.label_5->setScaledContents(true);
-	//ui.label_6->setScaledContents(true);
 
-	ui.label->setText("Hello!");
+	ui.label->setScaledContents(false);
+	ui.label_2->setScaledContents(false);
+	ui.label_3->setScaledContents(false);
+	ui.label_4->setScaledContents(false);
+	ui.label_5->setScaledContents(false);
 
-	connect(ui.pBt_LoadImage, SIGNAL(clicked()), this, SLOT(LoadImage()));	// 点击ui.pBt_LoadImage时，进行LoadImage()操作
+	ui.label->setText("Frame 1");
+	ui.label_2->setText("Frame 2");
+	ui.label_3->setText("Range Setting");
+	ui.label_4->setText("Polar Image");
+	ui.label_5->setText("Result");
+
+	connect(ui.pBt_LoadImage, SIGNAL(clicked()), this, SLOT(LoadImage()));
 	connect(ui.pBt_LoadImage_2, SIGNAL(clicked()), this, SLOT(LoadImage_2()));
 	connect(ui.pBt_Diff, SIGNAL(clicked()), this, SLOT(Diff()));
 	connect(ui.pBt_Locate, SIGNAL(clicked()), this, SLOT(Locate()));
@@ -48,7 +49,7 @@ void UAV2022::LoadImage()
 	name1 = ImagePath.toStdString();
 	outImage = src1 = imread(name1);
 
-	//ui.label->update();		// ？
+	ui.label->update();
 }
 
 
@@ -62,11 +63,12 @@ void UAV2022::LoadImage_2()
 	src2 = imread(name2);
 
 	ui.label_2->showImage(ImagePath);
-	/*QPixmap pixmap(ImagePath);
-	ui.label_2->setPixmap(pixmap);*/
+
+	ui.label_2->update();
 }
 
 
+// 帧间差分
 void UAV2022::Diff()
 {
 	//diff_result.create(greyFrame.size(), greyFrame.type());
@@ -74,9 +76,8 @@ void UAV2022::Diff()
 	imwrite("./tmp/tmp.jpg", diff_result);
 
 	ui.label_3->showImage("./tmp/tmp.jpg");
-	/*QPixmap pixmap("./tmp/tmp.jpg");
-	ui.label_2->setPixmap(pixmap);*/
-	//system("rm ./resources/tmp.jpg");
+
+	ui.label_3->update();
 	remove("./tmp/tmp.jpg");
 }
 

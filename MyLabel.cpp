@@ -27,6 +27,12 @@ void MyLabel::showImage(QString ImagePath)
 }
 
 
+void MyLabel::paintEvent(QEvent * event)
+{
+
+}
+
+
 void MyLabel::enterEvent(QEvent *event)
 {
 	// 设置鼠标样式
@@ -41,7 +47,27 @@ void MyLabel::leaveEvent(QEvent *event)
 
 void MyLabel::wheelEvent(QWheelEvent * event)
 {
-	if (this->frameGeometry().contains(event->pos()))
+	QPoint point = event->pos();
+	QRect rect = this->frameGeometry();
+	QPoint point1;
+	point1.setX(event->pos().x()+ 320);
+	point1.setY(event->pos().y());
+
+	//if (rect.x)
+	//{
+	//	point1; //label
+	//}
+	//else if()
+	//{
+	//	point.。。。。  //label2
+	//}
+	//else if 
+	//{
+
+	//}
+
+
+	if (this->frameGeometry().contains(point1))
 	{
 		pixW = pixmap.width();
 		pixH = pixmap.height();
@@ -95,4 +121,29 @@ void MyLabel::Label_RightMenu()
 {
 	RightMenu->addAction(Open1);
 	RightMenu->exec(QCursor::pos());
+}
+
+
+//鼠标摁下
+void MyLabel::mousePressEvent(QMouseEvent *event)
+{
+	OldPos = event->pos();
+	Pressed = true;
+}
+//鼠标松开
+void MyLabel::mouseMoveEvent(QMouseEvent *event)
+{
+	if (!Pressed)
+		return QWidget::mouseMoveEvent(event);
+
+	this->setCursor(Qt::SizeAllCursor);
+	QPoint pos = event->pos();
+	int xPtInterval = pos.x() - OldPos.x();
+	int yPtInterval = pos.y() - OldPos.y();
+
+	XPtInterval += xPtInterval;
+	YPtInterval += yPtInterval;
+
+	OldPos = pos;
+	update();
 }
