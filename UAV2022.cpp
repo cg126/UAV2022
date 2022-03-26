@@ -282,8 +282,8 @@ void UAV2022::Polar()
 	}
 
 	imwrite("./tmp/polar.jpg", imgg);
-	QPixmap pixmap("./tmp/Polar.jpg");
-	ui.label_4->setPixmap(pixmap);
+
+	ui.label_4->showImage("./tmp/Polar.jpg");
 	//system("rm ./tmp/Polar.jpg");
 }
 
@@ -373,9 +373,11 @@ void UAV2022::Edge()
 	}
 
 	imwrite("./tmp/Edge.jpg", img2);
-	QPixmap pixmap("./tmp/Edge.jpg");
-	ui.label_4->setPixmap(pixmap);
-	//system("rm ./tmp/Edge.jpg");
+	ui.label_4->showImage("./tmp/Edge.jpg");
+	/*QPixmap pixmap("./tmp/Edge.jpg");
+	ui.label_4->setPixmap(pixmap);*/
+	//system("rm ./tmp/Edge.jpg");		// didn't work
+	remove("./tmp/Edge.jpg");
 }
 
 
@@ -410,8 +412,10 @@ void UAV2022::Mark()
 
 	imwrite("./tmp/result.png", outImage);
 
-	QPixmap pixmap("./tmp/result.png");
-	ui.label_5->setPixmap(pixmap);
+	ui.label_5->showImage("./tmp/result.png");
+	/*QPixmap pixmap("./tmp/result.png");
+	ui.label_5->setPixmap(pixmap);*/
+	remove("./tmp/result.png");
 }
 
 

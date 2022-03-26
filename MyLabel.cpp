@@ -47,26 +47,42 @@ void MyLabel::leaveEvent(QEvent *event)
 
 void MyLabel::wheelEvent(QWheelEvent * event)
 {
+	// event->pos()：鼠标坐标
+	// this->frameGeometry()：Label框的范围
 	QPoint point = event->pos();
 	QRect rect = this->frameGeometry();
 	QPoint point1;
-	point1.setX(event->pos().x()+ 320);
-	point1.setY(event->pos().y());
-
-	//if (rect.x)
-	//{
-	//	point1; //label
-	//}
-	//else if()
-	//{
-	//	point.。。。。  //label2
-	//}
-	//else if 
-	//{
-
-	//}
 
 
+	if (rect.x() == 0)
+	{
+		point1.setX(event->pos().x());
+		point1.setY(event->pos().y());
+	}
+	else if(rect.x() == 326)
+	{
+		point1.setX(event->pos().x() + 326);
+		point1.setY(event->pos().y());
+	}
+	else if (rect.x() == 652)
+	{
+		point1.setX(event->pos().x() + 652);
+		point1.setY(event->pos().y());
+	}
+	else if (rect.x() == 10 && rect.y() == 260)
+	{
+		point1.setX(event->pos().x() + 10);
+		point1.setY(event->pos().y() + 260);
+	}
+	else if (rect.x() == 660 && rect.y() == 260)
+	{
+		point1.setX(event->pos().x() + 660);
+		point1.setY(event->pos().y() + 260);
+	}
+
+
+
+	// 如果鼠标所在的Label框的范围包含了鼠标的坐标，则滚轮功能生效
 	if (this->frameGeometry().contains(point1))
 	{
 		pixW = pixmap.width();
