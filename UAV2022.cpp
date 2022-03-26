@@ -283,7 +283,7 @@ void UAV2022::Polar()
 
 	imwrite("./tmp/polar.jpg", imgg);
 
-	ui.label_4->showImage("./tmp/Polar.jpg");
+	ui.label_4->showImage_ZI("./tmp/Polar.jpg");
 	//system("rm ./tmp/Polar.jpg");
 }
 
@@ -373,7 +373,7 @@ void UAV2022::Edge()
 	}
 
 	imwrite("./tmp/Edge.jpg", img2);
-	ui.label_4->showImage("./tmp/Edge.jpg");
+	ui.label_4->showImage_ZI("./tmp/Edge.jpg");
 	/*QPixmap pixmap("./tmp/Edge.jpg");
 	ui.label_4->setPixmap(pixmap);*/
 	//system("rm ./tmp/Edge.jpg");		// didn't work

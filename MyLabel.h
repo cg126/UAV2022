@@ -17,6 +17,7 @@ public:
 
 	QPixmap pixmap;
 	void showImage(QString ImagePath);
+	void showImage_ZI(QString ImagePath);
 
 public:
 	// ÓÒ¼ü²Ëµ¥

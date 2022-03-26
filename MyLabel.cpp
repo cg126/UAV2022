@@ -27,6 +27,18 @@ void MyLabel::showImage(QString ImagePath)
 }
 
 
+void MyLabel::showImage_ZI(QString ImagePath)
+{
+	pixmap = ImagePath;
+	this->setScaledContents(false);
+	float ra = 1.5;
+	int pW = pixmap.width() * ra;
+	int pH = pixmap.height() * ra;
+	pixmap = pixmap.scaled(pW, pH, Qt::IgnoreAspectRatio);
+	this->setPixmap(pixmap);
+}
+
+
 void MyLabel::paintEvent(QEvent * event)
 {
 
