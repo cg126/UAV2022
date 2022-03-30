@@ -73,6 +73,7 @@ public slots:
 	void Polar();
 	void Edge();
 	void Mark();
+	void Run();
 
 	//void ImageEnlarge();
 	//void ImageShrink();

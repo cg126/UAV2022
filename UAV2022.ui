@@ -240,6 +240,19 @@
     </property>
    </widget>
   </widget>
+  <widget class="QPushButton" name="pBt_Run">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>390</y>
+     <width>121</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>检测</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

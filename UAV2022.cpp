@@ -34,6 +34,7 @@ UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量�
 	connect(ui.pBt_Polar, SIGNAL(clicked()), this, SLOT(Polar()));
 	connect(ui.pBt_Edge, SIGNAL(clicked()), this, SLOT(Edge()));
 	connect(ui.pBt_Mark, SIGNAL(clicked()), this, SLOT(Mark()));
+	connect(ui.pBt_Run, SIGNAL(clicked()), this, SLOT(Run()));
 }
 
 
@@ -416,6 +417,17 @@ void UAV2022::Mark()
 	/*QPixmap pixmap("./tmp/result.png");
 	ui.label_5->setPixmap(pixmap);*/
 	remove("./tmp/result.png");
+}
+
+
+void UAV2022::Run()
+{
+	Diff();
+	Locate();
+	PolarRange();
+	Polar();
+	Edge();
+	Mark();
 }
 
 
