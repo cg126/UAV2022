@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QMenu>
 #include <QAction.h>
+#include <QPainter>
 
 class MyLabel : public QLabel
 {
@@ -15,7 +16,6 @@ public:
 	MyLabel(QWidget *parent = Q_NULLPTR);	// 怎么理解参数？
 	~MyLabel();
 
-	QPixmap pixmap;
 	void showImage(QString ImagePath);
 	void showImage_ZI(QString ImagePath);
 
@@ -23,11 +23,20 @@ public:
 	// 右键菜单
 	QMenu *RightMenu;
 	QAction *Open1;
+	QPixmap pixmap;
+
+	enum Type
+	{
+		None = 0,
+		Shrink,
+		Amplification,
+		Move
+	};
 
 protected:
 
 	void Label_RightMenu();							// 右键菜单
-	void paintEvent(QEvent *event);
+	void paintEvent(QPaintEvent *event) override;
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);
 	void wheelEvent(QWheelEvent *event) override;	// 滚轮
@@ -35,6 +44,7 @@ protected:
 	void mouseMoveEvent(QMouseEvent * event);		// 鼠标松开
 
 private:
+	int action;				// 动作信号
 	float ratio = 1.0;
 	int pixW, pixH;			// 图片原始宽高
 	int NowW, NowH;			// 图片当前宽高

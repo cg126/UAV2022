@@ -431,63 +431,63 @@ void UAV2022::Run()
 }
 
 
-void UAV2022::paintEvent(QPaintEvent *event)
-{
-	QPainter painter(this);
-
-	if (action == UAV2022::Move)                    //移动
-	{
-		int offsetx = Alloffset.x() + offset.x();
-		Alloffset.setX(offsetx);
-
-		int offsety = Alloffset.y() + offset.y();
-		Alloffset.setY(offsety);
-		action = UAV2022::None;
-	}
-
-	if (abs(Alloffset.x()) >= (ui.label->width() / 2 + NowW / 2 - 10))    //限制X偏移值
-	{
-		if (Alloffset.x() > 0)
-			Alloffset.setX(ui.label->width() / 2 + NowW / 2 - 10);
-		else
-			Alloffset.setX(-ui.label->width() / 2 + -NowW / 2 + 10);
-	}
-	if (abs(Alloffset.y()) >= (ui.label->height() / 2 + NowH / 2 - 10))    //限制Y偏移值
-	{
-		if (Alloffset.y() > 0)
-			Alloffset.setY(ui.label->height() / 2 + NowH / 2 - 10);
-		else
-			Alloffset.setY(-ui.label->height() / 2 + -NowH / 2 + 10);
-
-	}
-
-	int x = ui.label->width() / 2 + Alloffset.x() - NowW / 2;
-	if (x < 0)
-		x = 0;
-
-
-	int y = ui.label->height() / 2 + Alloffset.y() - NowH / 2;
-	if (y < 0)
-		y = 0;
-
-	int  sx = NowW / 2 - ui.label->width() / 2 - Alloffset.x();
-	if (sx < 0)
-		sx = 0;
-
-	int  sy = NowH / 2 - ui.label->height() / 2 - Alloffset.y();
-	if (sy < 0)
-		sy = 0;
-
-
-	int w = (NowW - sx) > ui.label->width() ? ui.label->width() : (NowW - sx);
-	if (w > (ui.label->width() - x))
-		w = ui.label->width() - x;
-
-	int h = (NowH - sy) > ui.label->height() ? ui.label->height() : (NowH - sy);
-	if (h > (ui.label->height() - y))
-		h = ui.label->height() - y;
-
-	//painter.drawRect(ui.label->x() - 1, ui.label->y() - 1, ui.label->width() + 1, ui.label->height() + 1); //画框
-	//painter.drawPixmap(x + ui.label->x(), y + ui.label->y(), Soure_pixmap, 0, 0, sx, sy);
-	painter.drawTiledPixmap(x + ui.label->x(), y + ui.label->y(), w, h, Soure_pixmap, sx, sy);             //绘画图形
-}
+//void UAV2022::paintEvent(QPaintEvent *event)
+//{
+//	QPainter painter(this);
+//
+//	if (action == UAV2022::Move)                    //移动
+//	{
+//		int offsetx = Alloffset.x() + offset.x();
+//		Alloffset.setX(offsetx);
+//
+//		int offsety = Alloffset.y() + offset.y();
+//		Alloffset.setY(offsety);
+//		action = UAV2022::None;
+//	}
+//
+//	if (abs(Alloffset.x()) >= (ui.label->width() / 2 + NowW / 2 - 10))    //限制X偏移值
+//	{
+//		if (Alloffset.x() > 0)
+//			Alloffset.setX(ui.label->width() / 2 + NowW / 2 - 10);
+//		else
+//			Alloffset.setX(-ui.label->width() / 2 + -NowW / 2 + 10);
+//	}
+//	if (abs(Alloffset.y()) >= (ui.label->height() / 2 + NowH / 2 - 10))    //限制Y偏移值
+//	{
+//		if (Alloffset.y() > 0)
+//			Alloffset.setY(ui.label->height() / 2 + NowH / 2 - 10);
+//		else
+//			Alloffset.setY(-ui.label->height() / 2 + -NowH / 2 + 10);
+//
+//	}
+//
+//	int x = ui.label->width() / 2 + Alloffset.x() - NowW / 2;
+//	if (x < 0)
+//		x = 0;
+//
+//
+//	int y = ui.label->height() / 2 + Alloffset.y() - NowH / 2;
+//	if (y < 0)
+//		y = 0;
+//
+//	int  sx = NowW / 2 - ui.label->width() / 2 - Alloffset.x();
+//	if (sx < 0)
+//		sx = 0;
+//
+//	int  sy = NowH / 2 - ui.label->height() / 2 - Alloffset.y();
+//	if (sy < 0)
+//		sy = 0;
+//
+//
+//	int w = (NowW - sx) > ui.label->width() ? ui.label->width() : (NowW - sx);
+//	if (w > (ui.label->width() - x))
+//		w = ui.label->width() - x;
+//
+//	int h = (NowH - sy) > ui.label->height() ? ui.label->height() : (NowH - sy);
+//	if (h > (ui.label->height() - y))
+//		h = ui.label->height() - y;
+//
+//	//painter.drawRect(ui.label->x() - 1, ui.label->y() - 1, ui.label->width() + 1, ui.label->height() + 1); //画框
+//	//painter.drawPixmap(x + ui.label->x(), y + ui.label->y(), Soure_pixmap, 0, 0, sx, sy);
+//	painter.drawTiledPixmap(x + ui.label->x(), y + ui.label->y(), w, h, Soure_pixmap, sx, sy);             //绘画图形
+//}

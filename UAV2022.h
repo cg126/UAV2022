@@ -80,5 +80,5 @@ public slots:
 
 private:
     Ui::UAV2022Class ui;
-	void paintEvent(QPaintEvent *event);
+	//void paintEvent(QPaintEvent *event);
 };

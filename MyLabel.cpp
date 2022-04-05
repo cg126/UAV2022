@@ -39,9 +39,15 @@ void MyLabel::showImage_ZI(QString ImagePath)
 }
 
 
-void MyLabel::paintEvent(QEvent * event)
+void MyLabel::paintEvent(QPaintEvent * event)
 {
+	QPainter painter(this);
 
+	
+	int w = pixmap.width();
+	int h = pixmap.height();
+
+	painter.drawTiledPixmap(XPtInterval, YPtInterval, w, h, pixmap);
 }
 
 
@@ -64,7 +70,6 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 	QPoint point = event->pos();
 	QRect rect = this->frameGeometry();
 	QPoint point1;
-
 
 	if (rect.x() == 0)
 	{
@@ -91,8 +96,6 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 		point1.setX(event->pos().x() + 660);
 		point1.setY(event->pos().y() + 260);
 	}
-
-
 
 	// 如果鼠标所在的Label框的范围包含了鼠标的坐标，则滚轮功能生效
 	if (this->frameGeometry().contains(point1))
@@ -158,6 +161,8 @@ void MyLabel::mousePressEvent(QMouseEvent *event)
 	OldPos = event->pos();
 	Pressed = true;
 }
+
+
 //鼠标松开
 void MyLabel::mouseMoveEvent(QMouseEvent *event)
 {
@@ -172,6 +177,8 @@ void MyLabel::mouseMoveEvent(QMouseEvent *event)
 	XPtInterval += xPtInterval;
 	YPtInterval += yPtInterval;
 
+	//action = MyLabel::Move;
 	OldPos = pos;
-	update();
+
+	this->update();
 }
