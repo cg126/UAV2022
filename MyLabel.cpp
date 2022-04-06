@@ -5,22 +5,29 @@ MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 {
 	// ÉèÖÃÐÂ½¨ÓÒ¼ü²Ëµ¥
 	this->setContextMenuPolicy(Qt::CustomContextMenu);
-
 	
 	NowH = 480;
 	NowW = 640;
 	RightMenu = new QMenu();
-	Open1 = new QAction(QString::fromLocal8Bit("¼ÓÔØÍ¼Æ¬"));
+	Load = new QAction(QString::fromLocal8Bit("¼ÓÔØÍ¼Æ¬"));
+	Save = new QAction(QString::fromLocal8Bit("±£´æÍ¼Æ¬"));
 	
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(Label_RightMenu()));
-
-	connect(Open1, SIGNAL(triggered()), this, SLOT(LoadImage()));
-
+	connect(Load, SIGNAL(triggered()), this, SLOT(LoadImage()));
+	connect(Save, SIGNAL(triggered()), this, SLOT(SaveImage()));
 }
 
 
 MyLabel::~MyLabel()
 {}
+
+
+void MyLabel::Label_RightMenu()
+{
+	RightMenu->addAction(Load);
+	RightMenu->addAction(Save);
+	RightMenu->exec(QCursor::pos());
+}
 
 
 void MyLabel::LoadImage()
@@ -35,6 +42,12 @@ void MyLabel::LoadImage()
 	//outImage = src1 = imread(name1);
 
 	update();
+}
+
+
+void MyLabel::SaveImage()
+{
+
 }
 
 
@@ -166,13 +179,6 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 			this->update();
 		}
 	}
-}
-
-
-void MyLabel::Label_RightMenu()
-{
-	RightMenu->addAction(Open1);
-	RightMenu->exec(QCursor::pos());
 }
 
 

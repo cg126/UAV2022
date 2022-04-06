@@ -24,7 +24,7 @@ public:
 public:
 	// 右键菜单
 	QMenu *RightMenu;
-	QAction *Open1;
+	QAction *Load, *Save;
 	QPixmap pixmap;
 
 	enum Type
@@ -49,6 +49,7 @@ public slots:
 	void Label_RightMenu();							// 右键菜单
 	void showImage(QString ImagePath);
 	void LoadImage();
+	void SaveImage();
 
 private:
 	int action;				// 动作信号
