@@ -8,7 +8,6 @@
 #include <QPainter>
 #include <QMainWindow>
 #include "ui_UAV2022.h"
-#include "function.h"
 
 class UAV2022 : public QWidget		// UAV2022¼Ì³ÐQWidget
 {

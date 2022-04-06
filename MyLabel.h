@@ -7,6 +7,8 @@
 #include <QMenu>
 #include <QAction.h>
 #include <QPainter>
+#include <QFileDialog>
+#include "function.h"
 
 class MyLabel : public QLabel
 {
@@ -16,7 +18,7 @@ public:
 	MyLabel(QWidget *parent = Q_NULLPTR);	// 怎么理解参数？
 	~MyLabel();
 
-	void showImage(QString ImagePath);
+	
 	void showImage_ZI(QString ImagePath);
 
 public:
@@ -35,13 +37,18 @@ public:
 
 protected:
 
-	void Label_RightMenu();							// 右键菜单
+	
 	void paintEvent(QPaintEvent *event) override;
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);
 	void wheelEvent(QWheelEvent *event) override;	// 滚轮
 	void mousePressEvent(QMouseEvent * event);		// 鼠标按下
 	void mouseMoveEvent(QMouseEvent * event);		// 鼠标松开
+
+public slots:
+	void Label_RightMenu();							// 右键菜单
+	void showImage(QString ImagePath);
+	void LoadImage();
 
 private:
 	int action;				// 动作信号
@@ -54,3 +61,5 @@ private:
 	QPoint OldPos;
 	bool Pressed = false;
 };
+
+

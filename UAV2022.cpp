@@ -1,5 +1,4 @@
 ﻿#include "UAV2022.h"
-#include "function.h"
 #include "MyLabel.h"
 
 String name1, name2;

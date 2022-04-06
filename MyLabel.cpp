@@ -10,14 +10,32 @@ MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 	NowH = 480;
 	NowW = 640;
 	RightMenu = new QMenu();
-	Open1 = new QAction(QString::fromLocal8Bit("显示数据"));
+	Open1 = new QAction(QString::fromLocal8Bit("加载图片"));
 	
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(Label_RightMenu()));
+
+	connect(Open1, SIGNAL(triggered()), this, SLOT(LoadImage()));
+
 }
 
 
 MyLabel::~MyLabel()
 {}
+
+
+void MyLabel::LoadImage()
+{
+	QString ImagePath;
+
+	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
+
+	showImage(ImagePath);
+
+	//String name1 = ImagePath.toStdString();
+	//outImage = src1 = imread(name1);
+
+	update();
+}
 
 
 void MyLabel::showImage(QString ImagePath)
