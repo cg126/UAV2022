@@ -6,13 +6,16 @@ MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 	// 设置新建右键菜单
 	this->setContextMenuPolicy(Qt::CustomContextMenu);
 
+	
 	NowH = 480;
 	NowW = 640;
 	RightMenu = new QMenu();
 	Open1 = new QAction(QString::fromLocal8Bit("加载图片"));
 	
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(Label_RightMenu()));
+
 	connect(Open1, SIGNAL(triggered()), this, SLOT(LoadImage()));
+
 }
 
 
@@ -61,60 +64,11 @@ void MyLabel::paintEvent(QPaintEvent * event)
 {
 	QPainter painter(this);
 
+	
 	//int w = pixmap.width();
 	//int h = pixmap.height();
-	if (action == MyLabel::ZoomOut)
-	{
-		if (ratio <= 0.22)
-		{
-			NowW = 0.2 * pixW;
-			NowH = 0.2 * pixH;
 
-			this->setScaledContents(false);
-			QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-			this->setPixmap(pixmapTemp);
-			this->update();
-
-			ratio = 0.2;
-			action == MyLabel::None;
-		}
-		else
-		{
-			ratio -= 0.1;
-			NowW = ratio * pixW;
-			NowH = ratio * pixH;
-
-			this->setScaledContents(false);
-			QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-			this->setPixmap(pixmapTemp);
-			this->update();
-
-			action == MyLabel::None;
-		}
-	}
-
-	if (action == MyLabel::ZoomIn)
-	{
-		//action = Drone2021::Amplification;
-		//this->update();
-		ratio += 0.1;
-		NowW = ratio * pixW;
-		NowH = ratio * pixH;
-
-		this->setScaledContents(false);
-		QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-		this->setPixmap(pixmapTemp);
-		this->update();
-
-		action == MyLabel::None;
-	}
-
-	if (action == MyLabel::Move)
-	{
-		painter.drawTiledPixmap(XPtInterval, YPtInterval, NowW, NowH, pixmap);
-
-		action == MyLabel::None;
-	}
+	painter.drawTiledPixmap(XPtInterval, YPtInterval, NowW, NowH, pixmap);
 }
 
 
@@ -171,48 +125,46 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 		pixH = pixmap.height();
 		//QApplication::setOverrideCursor(Qt::OpenHandCursor); //设置鼠标样式
 		if (event->delta() < 0)     //下滑，缩小
-			action == MyLabel::ZoomOut;
-		//{
-		//	//action = Drone2021::Shrink;
-		//	//this->update();
-		//	if (ratio <= 0.22)
-		//	{
-		//		NowW = 0.2 * pixW;
-		//		NowH = 0.2 * pixH;
+		{
+			//action = Drone2021::Shrink;
+			//this->update();
+			if (ratio <= 0.22)
+			{
+				NowW = 0.2 * pixW;
+				NowH = 0.2 * pixH;
 
-		//		this->setScaledContents(false);
-		//		QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-		//		this->setPixmap(pixmapTemp);
-		//		this->update();
+				this->setScaledContents(false);
+				QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+				this->setPixmap(pixmapTemp);
+				this->update();
 
-		//		ratio = 0.2;
-		//	}
-		//	else
-		//	{
-		//		ratio -= 0.1;
-		//		NowW = ratio * pixW;
-		//		NowH = ratio * pixH;
+				ratio = 0.2;
+			}
+			else
+			{
+				ratio -= 0.1;
+				NowW = ratio * pixW;
+				NowH = ratio * pixH;
 
-		//		this->setScaledContents(false);
-		//		QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-		//		this->setPixmap(pixmapTemp);
-		//		this->update();
-		//	}		
-		//}
+				this->setScaledContents(false);
+				QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+				this->setPixmap(pixmapTemp);
+				this->update();
+			}		
+		}
 		else                         //上滑，放大
-			action == ZoomIn;
-		//{
-		//	//action = Drone2021::Amplification;
-		//	//this->update();
-		//	ratio += 0.1;
-		//	NowW = ratio * pixW;
-		//	NowH = ratio * pixH;
+		{
+			//action = Drone2021::Amplification;
+			//this->update();
+			ratio += 0.1;
+			NowW = ratio * pixW;
+			NowH = ratio * pixH;
 
-		//	this->setScaledContents(false);
-		//	QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-		//	this->setPixmap(pixmapTemp);
-		//	this->update();
-		//}
+			this->setScaledContents(false);
+			QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+			this->setPixmap(pixmapTemp);
+			this->update();
+		}
 	}
 }
 
