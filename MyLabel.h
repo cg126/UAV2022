@@ -26,7 +26,8 @@ public:
 
 protected:
 
-	void Label_RightMenu();							// ÓÒ¼ü²Ëµ¥
+	//void Label_RightMenu();							// ÓÒ¼ü²Ëµ¥
+	//void contextMenuEvent(QContextMenuEvent *event);
 	void paintEvent(QEvent *event);
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);

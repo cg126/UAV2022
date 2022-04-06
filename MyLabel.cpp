@@ -3,10 +3,11 @@
 
 MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 {
-	// 设置新建右键菜单
-	this->setContextMenuPolicy(Qt::CustomContextMenu);
-
-	
+	// 设置新建右键菜单	
+	addAction(new QAction("Load", this));
+	addAction(new QAction("Save", this));
+	addAction(new QAction("view", this));
+	this->setContextMenuPolicy(Qt::ActionsContextMenu);
 
 	RightMenu = new QMenu();
 	Open1 = new QAction(QString::fromLocal8Bit("显示数据"));
@@ -37,6 +38,14 @@ void MyLabel::showImage_ZI(QString ImagePath)
 	pixmap = pixmap.scaled(pW, pH, Qt::IgnoreAspectRatio);
 	this->setPixmap(pixmap);
 }
+
+
+//void MyLabel::contextMenuEvent(QContextMenuEvent * event)
+//{
+//	QMenu Context;
+//	Context.addAction(Open1);
+//	Context.exec(QCursor::pos());
+//}
 
 
 void MyLabel::paintEvent(QEvent * event)
@@ -145,11 +154,11 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 }
 
 
-void MyLabel::Label_RightMenu()
-{
-	RightMenu->addAction(Open1);
-	RightMenu->exec(QCursor::pos());
-}
+//void MyLabel::Label_RightMenu()
+//{
+//	RightMenu->addAction(Open1);
+//	RightMenu->exec(QCursor::pos());
+//}
 
 
 //鼠标摁下
