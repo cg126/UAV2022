@@ -30,8 +30,8 @@ public:
 	enum Type
 	{
 		None = 0,
-		Shrink,
-		Amplification,
+		ZoomOut,
+		ZoomIn,
 		Move
 	};
 
