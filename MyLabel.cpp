@@ -7,7 +7,8 @@ MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 	this->setContextMenuPolicy(Qt::CustomContextMenu);
 
 	
-
+	NowH = 480;
+	NowW = 640;
 	RightMenu = new QMenu();
 	Open1 = new QAction(QString::fromLocal8Bit("ÏÔÊ¾Êý¾Ý"));
 	
@@ -22,6 +23,8 @@ MyLabel::~MyLabel()
 void MyLabel::showImage(QString ImagePath)
 {
 	pixmap = ImagePath;
+	NowW = pixW = pixmap.width();
+	NowH = pixH = pixmap.height();
 	this->setScaledContents(false);
 	this->setPixmap(pixmap);
 }
@@ -44,10 +47,10 @@ void MyLabel::paintEvent(QPaintEvent * event)
 	QPainter painter(this);
 
 	
-	int w = pixmap.width();
-	int h = pixmap.height();
+	//int w = pixmap.width();
+	//int h = pixmap.height();
 
-	painter.drawTiledPixmap(XPtInterval, YPtInterval, w, h, pixmap);
+	painter.drawTiledPixmap(XPtInterval, YPtInterval, NowW, NowH, pixmap);
 }
 
 
