@@ -6,6 +6,8 @@
 #include <QApplication>
 #include <QMenu>
 #include <QAction.h>
+#include <QFileDialog>
+//#include "UAV2022.h"
 
 class MyLabel : public QLabel
 {
@@ -22,7 +24,7 @@ public:
 public:
 	// 右键菜单
 	QMenu *RightMenu;
-	QAction *Open1;
+	QAction *Load, *Save;
 
 protected:
 
@@ -34,6 +36,12 @@ protected:
 	void wheelEvent(QWheelEvent *event) override;	// 滚轮
 	void mousePressEvent(QMouseEvent * event);		// 鼠标按下
 	void mouseMoveEvent(QMouseEvent * event);		// 鼠标松开
+
+public slots:
+	void Label_RightMenu();
+	// void showImage(QString ImagePath);
+	void LoadImage();
+	//void SaveImage();
 
 private:
 	float ratio = 1.0;

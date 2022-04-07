@@ -4,15 +4,15 @@
 MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 {
 	// 设置新建右键菜单	
-	addAction(new QAction("Load", this));
-	addAction(new QAction("Save", this));
-	addAction(new QAction("view", this));
 	this->setContextMenuPolicy(Qt::ActionsContextMenu);
 
 	RightMenu = new QMenu();
-	Open1 = new QAction(QString::fromLocal8Bit("显示数据"));
+	Load = new QAction(QString::fromLocal8Bit("加载图片"));
+	Save = new QAction(QString::fromLocal8Bit("保存图片"));
 	
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(Label_RightMenu()));
+	connect(Load, SIGNAL(triggered()), this, SLOT(LoadImage()));
+	connect(Save, SIGNAL(triggered()), this, SLOT(SaveImage()));
 }
 
 
@@ -20,10 +20,33 @@ MyLabel::~MyLabel()
 {}
 
 
+void MyLabel::Label_RightMenu()
+{
+	RightMenu->addAction(Load);
+	RightMenu->addAction(Save);
+	RightMenu->exec(QCursor::pos());
+}
+
+
+void MyLabel::LoadImage()
+{
+	QString ImagePath;
+
+	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
+
+	showImage(ImagePath);
+
+	//String name1 = ImagePath.toStdString();
+	//outImage = src1 = imread(name1);
+
+	update();
+}
+
+
 void MyLabel::showImage(QString ImagePath)
 {
 	pixmap = ImagePath;
-	this->setScaledContents(false);
+	this->setScaledContents(true);
 	this->setPixmap(pixmap);
 }
 
