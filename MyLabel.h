@@ -26,6 +26,8 @@ public:
 	QMenu *RightMenu;
 	QAction *Load, *Save;
 	QPixmap pixmap;
+	QPixmap Source_pixmap;
+
 
 	enum Type
 	{
@@ -37,13 +39,19 @@ public:
 
 protected:
 
-	
-	void paintEvent(QPaintEvent *event) override;
+	//xk
+	QString Pixmap_path;
+	bool event(QEvent *event);
+	QPoint offset;			// 此次移动的鼠标偏移量
+	QPoint Alloffset;		// 距离原点的鼠标偏移量
+
+
+	void paintEvent(QPaintEvent *event);
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);
 	void wheelEvent(QWheelEvent *event) override;	// 滚轮
-	void mousePressEvent(QMouseEvent * event);		// 鼠标按下
-	void mouseMoveEvent(QMouseEvent * event);		// 鼠标松开
+	//void mousePressEvent(QMouseEvent * event);		// 鼠标按下
+	//void mouseMoveEvent(QMouseEvent * event);		// 鼠标松开
 
 public slots:
 	void Label_RightMenu();							// 右键菜单
