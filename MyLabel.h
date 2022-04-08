@@ -7,7 +7,7 @@
 #include <QMenu>
 #include <QAction.h>
 #include <QFileDialog>
-//#include "UAV2022.h"
+#include "function.h"
 
 class MyLabel : public QLabel
 {
@@ -20,6 +20,8 @@ public:
 	QPixmap pixmap;
 	void showImage(QString ImagePath);
 	void showImage_ZI(QString ImagePath);
+
+	Mat image;
 
 public:
 	// ÓÒ¼ü²Ëµ¥
@@ -39,9 +41,8 @@ protected:
 
 public slots:
 	void Label_RightMenu();
-	// void showImage(QString ImagePath);
 	void LoadImage();
-	//void SaveImage();
+	void SaveImage();
 
 private:
 	float ratio = 1.0;

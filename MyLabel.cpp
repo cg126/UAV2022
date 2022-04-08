@@ -5,7 +5,6 @@ MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 {
 	// 设置新建右键菜单	
 	this->setContextMenuPolicy(Qt::ActionsContextMenu);
-
 	RightMenu = new QMenu();
 	Load = new QAction(QString::fromLocal8Bit("加载图片"));
 	Save = new QAction(QString::fromLocal8Bit("保存图片"));
@@ -31,7 +30,6 @@ void MyLabel::Label_RightMenu()
 void MyLabel::LoadImage()
 {
 	QString ImagePath;
-
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 
 	showImage(ImagePath);
@@ -40,6 +38,17 @@ void MyLabel::LoadImage()
 	//outImage = src1 = imread(name1);
 
 	update();
+
+	image = imread(ImagePath.toLocal8Bit().toStdString());
+}
+
+
+void MyLabel::SaveImage()
+{
+	QString ImagePath;
+	ImagePath = QFileDialog::getSaveFileName(this, tr("Save Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));
+
+	imwrite(ImagePath.toLocal8Bit().toStdString(), image);
 }
 
 
@@ -75,6 +84,7 @@ void MyLabel::paintEvent(QEvent * event)
 {
 
 }
+
 
 
 void MyLabel::enterEvent(QEvent *event)
