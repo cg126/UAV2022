@@ -14,6 +14,7 @@ UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量�
 {
 	ui.setupUi(this);
 
+
 	ui.label->setScaledContents(false);
 	ui.label_2->setScaledContents(false);
 	ui.label_3->setScaledContents(false);

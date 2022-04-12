@@ -36,8 +36,8 @@ protected:
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);
 	void wheelEvent(QWheelEvent *event) override;	// 滚轮
-	void mousePressEvent(QMouseEvent * event);		// 鼠标按下
-	void mouseMoveEvent(QMouseEvent * event);		// 鼠标松开
+	//void mousePressEvent(QMouseEvent * event);		// 鼠标按下
+	//void mouseMoveEvent(QMouseEvent * event);		// 鼠标松开
 
 public slots:
 	void Label_RightMenu();

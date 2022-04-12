@@ -4,10 +4,12 @@
 MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 {
 	// 设置新建右键菜单	
-	this->setContextMenuPolicy(Qt::ActionsContextMenu);
+	this->setContextMenuPolicy(Qt::CustomContextMenu);
 	RightMenu = new QMenu();
 	Load = new QAction(QString::fromLocal8Bit("加载图片"));
 	Save = new QAction(QString::fromLocal8Bit("保存图片"));
+
+	
 	
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(Label_RightMenu()));
 	connect(Load, SIGNAL(triggered()), this, SLOT(LoadImage()));
@@ -195,25 +197,27 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 
 
 //鼠标摁下
-void MyLabel::mousePressEvent(QMouseEvent *event)
-{
-	OldPos = event->pos();
-	Pressed = true;
-}
+//void MyLabel::mousePressEvent(QMouseEvent *event)
+//{
+//	OldPos = event->pos();
+//	Pressed = true;
+//}
+
+
 //鼠标松开
-void MyLabel::mouseMoveEvent(QMouseEvent *event)
-{
-	if (!Pressed)
-		return QWidget::mouseMoveEvent(event);
-
-	this->setCursor(Qt::SizeAllCursor);
-	QPoint pos = event->pos();
-	int xPtInterval = pos.x() - OldPos.x();
-	int yPtInterval = pos.y() - OldPos.y();
-
-	XPtInterval += xPtInterval;
-	YPtInterval += yPtInterval;
-
-	OldPos = pos;
-	update();
-}
+//void MyLabel::mouseMoveEvent(QMouseEvent *event)
+//{
+//	if (!Pressed)
+//		return QWidget::mouseMoveEvent(event);
+//
+//	this->setCursor(Qt::SizeAllCursor);
+//	QPoint pos = event->pos();
+//	int xPtInterval = pos.x() - OldPos.x();
+//	int yPtInterval = pos.y() - OldPos.y();
+//
+//	XPtInterval += xPtInterval;
+//	YPtInterval += yPtInterval;
+//
+//	OldPos = pos;
+//	update();
+//}
