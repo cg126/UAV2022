@@ -9,8 +9,6 @@ MyLabel::MyLabel(QWidget *parent) : QLabel(parent)
 	Load = new QAction(QString::fromLocal8Bit("加载图片"));
 	Save = new QAction(QString::fromLocal8Bit("保存图片"));
 
-	
-	
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(Label_RightMenu()));
 	connect(Load, SIGNAL(triggered()), this, SLOT(LoadImage()));
 	connect(Save, SIGNAL(triggered()), this, SLOT(SaveImage()));
@@ -25,7 +23,7 @@ void MyLabel::Label_RightMenu()
 {
 	RightMenu->addAction(Load);
 	RightMenu->addAction(Save);
-	RightMenu->exec(QCursor::pos());
+	RightMenu->exec(QCursor::pos());	// 在鼠标位置显示
 }
 
 
@@ -39,16 +37,15 @@ void MyLabel::LoadImage()
 	//String name1 = ImagePath.toStdString();
 	//outImage = src1 = imread(name1);
 
-	update();
+	//update();
 
-	image = imread(ImagePath.toLocal8Bit().toStdString());
 }
 
 
 void MyLabel::SaveImage()
 {
 	QString ImagePath;
-	ImagePath = QFileDialog::getSaveFileName(this, tr("Save Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));
+	ImagePath = QFileDialog::getSaveFileName(this, tr("Save Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg);;Image Files (*.png)"));
 
 	imwrite(ImagePath.toLocal8Bit().toStdString(), image);
 }
@@ -59,6 +56,8 @@ void MyLabel::showImage(QString ImagePath)
 	pixmap = ImagePath;
 	this->setScaledContents(true);
 	this->setPixmap(pixmap);
+
+	image = imread(ImagePath.toLocal8Bit().toStdString());
 }
 
 

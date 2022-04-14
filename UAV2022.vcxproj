@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)../Dependencies/opencv/build/include/opencv2;$(SolutionDir)../Dependencies/opencv/build/include/opencv;$(SolutionDir)../Dependencies/opencv/build/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)../Dependencies/opencv/build/include/opencv2;$(SolutionDir)../Dependencies/opencv/build/include/opencv;$(SolutionDir)../Dependencies/opencv/build/include;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)../Dependencies/opencv/build/x64/vc15/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -94,13 +94,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="WidgetPic.cpp" />
     <QtRcc Include="UAV2022.qrc" />
+    <QtUic Include="MainWindow.ui" />
     <QtUic Include="UAV2022.ui" />
     <QtMoc Include="UAV2022.h" />
     <ClCompile Include="function.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MyLabel.cpp" />
     <ClCompile Include="UAV2022.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="WidgetPic.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MyLabel.h" />
@@ -111,6 +115,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="function.h" />
+    <QtMoc Include="WidgetPic.h" />
+    <QtMoc Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

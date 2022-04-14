@@ -9,8 +9,8 @@ Mat greyFrame;
 int boxwidth = 0, boxheight = 0;
 
 
-UAV2022::UAV2022(QWidget *parent)	// 定义构造函数（用于为成员变量赋初值）
-    : QWidget(parent)
+UAV2022::UAV2022(QMdiSubWindow *parent)	// 定义构造函数（用于为成员变量赋初值）
+    : QMdiSubWindow(parent)
 {
 	ui.setupUi(this);
 

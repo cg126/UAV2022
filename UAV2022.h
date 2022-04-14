@@ -9,13 +9,14 @@
 #include <QMainWindow>
 #include "ui_UAV2022.h"
 #include "function.h"
+#include  <qmdisubwindow.h>
 
-class UAV2022 : public QWidget		// UAV2022继承QWidget
+class UAV2022 : public QMdiSubWindow		// UAV2022继承QWidget
 {
     Q_OBJECT		// 
 
 public:
-    UAV2022(QWidget *parent = Q_NULLPTR);	// 声明构造函数
+    UAV2022(QMdiSubWindow *parent = Q_NULLPTR);	// 声明构造函数
 
 public:
 	QPixmap Soure_pixmap;	// QPixmap定义的对象可存储图像
