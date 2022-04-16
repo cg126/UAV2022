@@ -7,29 +7,74 @@
     <x>0</x>
     <y>0</y>
     <width>658</width>
-    <height>498</height>
+    <height>524</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>WidgetPic</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="minimumSize">
-      <size>
-       <width>640</width>
-       <height>480</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-    </widget>
-   </item>
-  </layout>
+  <widget class="MyLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>35</y>
+     <width>640</width>
+     <height>480</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>640</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="text">
+    <string>label</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>600</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>600</width>
+     <height>20</height>
+    </size>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="text">
+    <string>第一帧</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyLabel</class>
+   <extends>QLabel</extends>
+   <header>mylabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

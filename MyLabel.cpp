@@ -42,15 +42,6 @@ void MyLabel::LoadImage()
 }
 
 
-void MyLabel::SaveImage()
-{
-	QString ImagePath;
-	ImagePath = QFileDialog::getSaveFileName(this, tr("Save Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg);;Image Files (*.png)"));
-
-	imwrite(ImagePath.toLocal8Bit().toStdString(), image);
-}
-
-
 void MyLabel::showImage(QString ImagePath)
 {
 	pixmap = ImagePath;
@@ -58,6 +49,15 @@ void MyLabel::showImage(QString ImagePath)
 	this->setPixmap(pixmap);
 
 	image = imread(ImagePath.toLocal8Bit().toStdString());
+}
+
+
+void MyLabel::SaveImage()
+{
+	QString ImagePath;
+	ImagePath = QFileDialog::getSaveFileName(this, tr("Save Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg);;Image Files (*.png)"));
+
+	imwrite(ImagePath.toLocal8Bit().toStdString(), image);
 }
 
 
@@ -87,7 +87,6 @@ void MyLabel::paintEvent(QEvent * event)
 }
 
 
-
 void MyLabel::enterEvent(QEvent *event)
 {
 	// 设置鼠标样式
@@ -107,7 +106,6 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 	QPoint point = event->pos();
 	QRect rect = this->frameGeometry();
 	QPoint point1;
-
 
 	if (rect.x() == 0)
 	{
@@ -134,8 +132,6 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 		point1.setX(event->pos().x() + 660);
 		point1.setY(event->pos().y() + 260);
 	}
-
-
 
 	// 如果鼠标所在的Label框的范围包含了鼠标的坐标，则滚轮功能生效
 	if (this->frameGeometry().contains(point1))

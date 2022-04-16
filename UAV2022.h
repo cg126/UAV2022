@@ -52,9 +52,9 @@ private:
 	int ergodic = 1, roi = 0;
 	int **t;
 
-	Mat image2;
+	Mat image_2;
 	Mat imgg;	// 存储极坐标图像
-	Mat img1;	// 存储极坐标图像二值化结果
+	Mat img_1;	// 存储极坐标图像二值化结果
 	Mat outImage;
 
 	QRect Paint;		//绘画区域

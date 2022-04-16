@@ -2,8 +2,8 @@
 #include "function.h"
 #include "MyLabel.h"
 
-String name1, name2;
-Mat src1, src2;
+String name_1, name_2;
+Mat src_1, src_2;
 Mat diff_result;
 Mat greyFrame;
 int boxwidth = 0, boxheight = 0;
@@ -48,8 +48,8 @@ void UAV2022::LoadImage()
 
 	ui.label->showImage(ImagePath);
 
-	name1 = ImagePath.toStdString();
-	outImage = src1 = imread(name1);
+	name_1 = ImagePath.toStdString();
+	outImage = src_1 = imread(name_1);
 
 	ui.label->update();
 }
@@ -61,8 +61,8 @@ void UAV2022::LoadImage_2()
 	QString ImagePath;
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 
-	name2 = ImagePath.toStdString();
-	src2 = imread(name2);
+	name_2 = ImagePath.toStdString();
+	src_2 = imread(name_2);
 
 	ui.label_2->showImage(ImagePath);
 
@@ -74,7 +74,7 @@ void UAV2022::LoadImage_2()
 void UAV2022::Diff()
 {
 	//diff_result.create(greyFrame.size(), greyFrame.type());
-	Diff2frame(src1, src2, diff_result);
+	Diff2frame(src_1, src_2, diff_result);
 	imwrite("./tmp/tmp.jpg", diff_result);
 
 	ui.label_3->showImage("./tmp/tmp.jpg");
@@ -87,8 +87,8 @@ void UAV2022::Diff()
 // 矩形框和中心点标定
 void UAV2022::Locate()
 {
-	int width = src1.cols;
-	int height = src1.rows;
+	int width = src_1.cols;
+	int height = src_1.rows;
 	int x11 = 0, x22 = 0, y11 = 0, y22 = 0;
 	int boxcenterx = 0, boxcentery = 0;
 
@@ -124,16 +124,16 @@ void UAV2022::Locate()
 	boxcenterx = centerx;
 	boxcentery = centery;
 
-	cvtColor(src1, greyFrame, CV_BGR2GRAY);
-	cvtColor(greyFrame, image2, CV_GRAY2BGR);
+	cvtColor(src_1, greyFrame, CV_BGR2GRAY);
+	cvtColor(greyFrame, image_2, CV_GRAY2BGR);
 	
 	//标记中心点
 	for (int i = -2; i <= 2; i++)
 		for (int j = -2; j <= 2; j++)
 		{
-			image2.at<Vec3b>(centery + i, centerx + j)[0] = 255;
-			image2.at<Vec3b>(centery + i, centerx + j)[1] = 0;
-			image2.at<Vec3b>(centery + i, centerx + j)[2] = 0;
+			image_2.at<Vec3b>(centery + i, centerx + j)[0] = 255;
+			image_2.at<Vec3b>(centery + i, centerx + j)[1] = 0;
+			image_2.at<Vec3b>(centery + i, centerx + j)[2] = 0;
 		}
 
 	boxwidth = abs(x11 - x22);//abs(x11 - x22) + 70;//70//126;//
@@ -141,26 +141,26 @@ void UAV2022::Locate()
 
 	for (int i = -boxwidth / 2 - 5; i < boxwidth / 2 + 5; i++)
 	{
-		image2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[0] = 0;
-		image2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[1] = 0;
-		image2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[2] = 255;
+		image_2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[0] = 0;
+		image_2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[1] = 0;
+		image_2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[2] = 255;
 
-		image2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[0] = 0;
-		image2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[1] = 0;
-		image2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[2] = 255;
+		image_2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[0] = 0;
+		image_2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[1] = 0;
+		image_2.at<Vec3b>(boxcentery + boxheight / 2 + 5, boxcenterx + i)[2] = 255;
 	}
 	for (int i = -boxheight / 2 - 5; i <= boxheight / 2 + 5; i++)
 	{
-		image2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[0] = 0;
-		image2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[1] = 0;
-		image2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[2] = 255;
+		image_2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[0] = 0;
+		image_2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[1] = 0;
+		image_2.at<Vec3b>(boxcentery - i, boxcenterx - boxwidth / 2 - 5)[2] = 255;
 
-		image2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[0] = 0;
-		image2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[1] = 0;
-		image2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[2] = 255;
+		image_2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[0] = 0;
+		image_2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[1] = 0;
+		image_2.at<Vec3b>(boxcentery + i, boxcenterx + boxwidth / 2 + 5)[2] = 255;
 	}
 
-	imwrite("./tmp/locate.jpg", image2);
+	imwrite("./tmp/locate.jpg", image_2);
 
 	ui.label_3->showImage("./tmp/locate.jpg");
 	/*QPixmap pixmap("./tmp/locate.jpg");
@@ -204,9 +204,9 @@ void UAV2022::PolarRange()
 
 			if (r == roi - 1)
 			{
-				image2.at<Vec3b>(y1 + 1, x1 + 1)[0] = 0;
-				image2.at<Vec3b>(y1 + 1, x1 + 1)[1] = 0;
-				image2.at<Vec3b>(y1 + 1, x1 + 1)[2] = 255;
+				image_2.at<Vec3b>(y1 + 1, x1 + 1)[0] = 0;
+				image_2.at<Vec3b>(y1 + 1, x1 + 1)[1] = 0;
+				image_2.at<Vec3b>(y1 + 1, x1 + 1)[2] = 255;
 			}
 			/************2021/07/15 标出极坐标转换区域*********************/
 
@@ -261,7 +261,7 @@ void UAV2022::PolarRange()
 		}
 	}
 
-	imwrite("./tmp/PolarRange.jpg", image2);
+	imwrite("./tmp/PolarRange.jpg", image_2);
 
 	ui.label_3->showImage("./tmp/PolarRange.jpg");
 	/*QPixmap pixmap("./tmp/PolarRange.jpg");
@@ -293,15 +293,15 @@ void UAV2022::Polar()
 // 边缘提取
 void UAV2022::Edge()
 {
-	img1.create(imgg.size(), imgg.type());
+	img_1.create(imgg.size(), imgg.type());
 	int thre = Otsu(imgg);
-	threshold(imgg, img1, 220, 255, CV_THRESH_BINARY);
+	threshold(imgg, img_1, 220, 255, CV_THRESH_BINARY);
 
 	for (int th = 0; th < 360 / ergodic; th = th++)
 	{
 		for (int r = roi - 1; r > 0; r--)
 		{
-			if (img1.at<uchar>(r, th) == 255)
+			if (img_1.at<uchar>(r, th) == 255)
 			{
 				m[th + 20] = r;
 				break;
