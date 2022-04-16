@@ -46,6 +46,7 @@ private:
 	Mat diff_result;
 	Mat greyFrame;
 	int boxwidth = 0, boxheight = 0;
+	int f_1 = 0, f_2 = 0, flag = 0;
 
 	//相关动作
 	int action;
