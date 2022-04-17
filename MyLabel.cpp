@@ -38,7 +38,6 @@ void MyLabel::LoadImage()
 	//outImage = src1 = imread(name1);
 
 	//update();
-
 }
 
 
@@ -134,44 +133,76 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 	}
 
 	// 如果鼠标所在的Label框的范围包含了鼠标的坐标，则滚轮功能生效
-	if (this->frameGeometry().contains(point1))
+	//if (this->frameGeometry().contains(point1))
+	//{
+	//	pixW = pixmap.width();
+	//	pixH = pixmap.height();
+	//	//QApplication::setOverrideCursor(Qt::OpenHandCursor); //设置鼠标样式
+	//	if (event->delta() < 0)     //下滑，缩小
+	//	{
+	//		//action = Drone2021::Shrink;
+	//		//this->update();
+	//		if (ratio <= 0.22)
+	//		{
+	//			NowW = 0.2 * pixW;
+	//			NowH = 0.2 * pixH;
+
+	//			this->setScaledContents(false);
+	//			QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+	//			this->setPixmap(pixmapTemp);
+	//			this->update();
+
+	//			ratio = 0.2;
+	//		}
+	//		else
+	//		{
+	//			ratio -= 0.1;
+	//			NowW = ratio * pixW;
+	//			NowH = ratio * pixH;
+
+	//			this->setScaledContents(false);
+	//			QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+	//			this->setPixmap(pixmapTemp);
+	//			this->update();
+	//		}		
+	//	}
+	//	else                         //上滑，放大
+	//	{
+	//		//action = Drone2021::Amplification;
+	//		//this->update();
+	//		ratio += 0.1;
+	//		NowW = ratio * pixW;
+	//		NowH = ratio * pixH;
+
+	//		this->setScaledContents(false);
+	//		QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+	//		this->setPixmap(pixmapTemp);
+	//		this->update();
+	//	}
+	//}
+
+	pixW = pixmap.width();
+	pixH = pixmap.height();
+	//QApplication::setOverrideCursor(Qt::OpenHandCursor); //设置鼠标样式
+	if (event->delta() < 0)     //下滑，缩小
 	{
-		pixW = pixmap.width();
-		pixH = pixmap.height();
-		//QApplication::setOverrideCursor(Qt::OpenHandCursor); //设置鼠标样式
-		if (event->delta() < 0)     //下滑，缩小
+		//action = Drone2021::Shrink;
+		//this->update();
+		if (ratio <= 0.22)
 		{
-			//action = Drone2021::Shrink;
-			//this->update();
-			if (ratio <= 0.22)
-			{
-				NowW = 0.2 * pixW;
-				NowH = 0.2 * pixH;
+			NowW = 0.2 * pixW;
+			NowH = 0.2 * pixH;
 
-				this->setScaledContents(false);
-				QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-				this->setPixmap(pixmapTemp);
-				this->update();
+			this->setScaledContents(false);
+			QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+			this->setPixmap(pixmapTemp);
+			this->update();
 
-				ratio = 0.2;
-			}
-			else
-			{
-				ratio -= 0.1;
-				NowW = ratio * pixW;
-				NowH = ratio * pixH;
-
-				this->setScaledContents(false);
-				QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
-				this->setPixmap(pixmapTemp);
-				this->update();
-			}		
+			ratio = 0.2;
 		}
-		else                         //上滑，放大
+		else
 		{
-			//action = Drone2021::Amplification;
-			//this->update();
-			ratio += 0.1;
+			ratio -= 0.1;
 			NowW = ratio * pixW;
 			NowH = ratio * pixH;
 
@@ -179,7 +210,20 @@ void MyLabel::wheelEvent(QWheelEvent * event)
 			QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
 			this->setPixmap(pixmapTemp);
 			this->update();
-		}
+		}		
+	}
+	else                         //上滑，放大
+	{
+		//action = Drone2021::Amplification;
+		//this->update();
+		ratio += 0.1;
+		NowW = ratio * pixW;
+		NowH = ratio * pixH;
+
+		this->setScaledContents(false);
+		QPixmap pixmapTemp = pixmap.scaled(NowW, NowH, Qt::IgnoreAspectRatio);
+		this->setPixmap(pixmapTemp);
+		this->update();
 	}
 }
 
