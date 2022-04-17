@@ -50,15 +50,18 @@ void MainWindow::frame_1()
 
 	QString ImagePath;
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
-
 	name_1 = ImagePath.toStdString();
-	outImage = src_1 = imread(name_1);
 
-	widget_1->SetPixmap(ImagePath);
-	pMDI->addSubWindow(widget_1);			// 嵌入到MainWindow中？
-	widget_1->show();
+	if (name_1 != NULL)
+	{
+		outImage = src_1 = imread(name_1);
 
-	f_1 = 1;
+		widget_1->SetPixmap(ImagePath);
+		pMDI->addSubWindow(widget_1);			// 嵌入到MainWindow中？
+		widget_1->show();
+
+		f_1 = 1;
+	}
 }
 
 
@@ -69,15 +72,18 @@ void MainWindow::frame_2()
 
 	QString ImagePath;
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
-
 	name_2 = ImagePath.toStdString();
-	outImage = src_2 = imread(name_2);
+	
+	if (name_2 != NULL)
+	{
+		outImage = src_2 = imread(name_2);
 
-	widget_2->SetPixmap(ImagePath);
-	pMDI->addSubWindow(widget_2);
-	widget_2->show();
+		widget_2->SetPixmap(ImagePath);
+		pMDI->addSubWindow(widget_2);
+		widget_2->show();
 
-	f_2 = 1;
+		f_2 = 1;
+	}
 }
 
 
@@ -100,7 +106,7 @@ void MainWindow::diff()
 	}
 	else
 	{
-		std::cout << "请先加载图像" << endl;
+		QMessageBox::about(this, "提示", "请先载入图像");
 	}
 }
 
@@ -109,7 +115,7 @@ void MainWindow::locate()
 {
 	if (flag != 1)
 	{
-		std::cout << "请先进行帧间差分操作" << endl;
+		QMessageBox::about(this, "提示", "请先进行帧间差分操作");
 	}
 	else
 	{
@@ -203,7 +209,7 @@ void MainWindow::polar_range()
 {
 	if (flag != 2)
 	{
-		std::cout << "请先进行矩形框和中心点标定" << endl;
+		QMessageBox::about(this, "提示", "请先进行矩形框和中心点标定");
 	}
 	else
 	{
@@ -315,7 +321,7 @@ void MainWindow::polar()
 {
 	if (flag != 3)
 	{
-		std::cout << "请先显示极坐标范围" << endl;
+		QMessageBox::about(this, "提示", "请先显示极坐标范围");
 	}
 	else
 	{
@@ -347,7 +353,7 @@ void MainWindow::edge()
 {
 	if (flag != 4)
 	{
-		std::cout << "请先显示极坐标图像" << endl;
+		QMessageBox::about(this, "提示", "请先显示极坐标图像");
 	}
 	else
 	{
@@ -450,7 +456,7 @@ void MainWindow::mark()
 {
 	if (flag != 5)
 	{
-		std::cout << "请先进行边缘提取" << endl;
+		QMessageBox::about(this, "提示", "请先进行边缘提取");
 	}
 	else
 	{

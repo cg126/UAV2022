@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <qmessagebox.h>
 #include "ui_WidgetPic.h"
 #include <qmdisubwindow.h>
 

@@ -13,7 +13,7 @@
 #include "UAV2022.h"
 #include "ui_MainWindow.h"
 #include "WidgetPic.h"
-#include <qmdiarea.h>
+#include <qmdiarea.h>		// ?
 
 class MainWindow : public QMainWindow
 {
