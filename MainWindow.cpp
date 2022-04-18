@@ -52,7 +52,7 @@ void MainWindow::frame_1()
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 	name_1 = ImagePath.toStdString();
 
-	if (name_1 != NULL)
+	if (name_1 != "")
 	{
 		outImage = src_1 = imread(name_1);
 
