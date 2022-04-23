@@ -94,6 +94,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="WidgetControl.cpp" />
     <ClCompile Include="WidgetPic.cpp" />
     <QtRcc Include="UAV2022.qrc" />
     <QtUic Include="MainWindow.ui" />
@@ -104,6 +105,7 @@
     <ClCompile Include="MyLabel.cpp" />
     <ClCompile Include="UAV2022.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="WidgetControl.ui" />
     <QtUic Include="WidgetPic.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="function.h" />
+    <QtMoc Include="WidgetControl.h" />
     <QtMoc Include="WidgetPic.h" />
     <QtMoc Include="MainWindow.h" />
   </ItemGroup>

@@ -9,21 +9,23 @@
 
 
 MainWindow::MainWindow(QMainWindow *parent)
-	: QMainWindow(parent)
+	: QMainWindow(parent)			// 对父类进行初始化
 {
-	ui.setupUi(this);		// ?
+	ui.setupUi(this);				// ?
 	this->resize(QDesktopWidget().availableGeometry(this).size() * 0.8);	// 设定主界面大小初始值为全屏的80%
 	this->setWindowTitle("无人机要害点检测系统");
 	//this->setWindowIcon(QIcon(":/new/prefix1/2.jpg"));
 
-	//中间实验数据显示区域
+	// Central Widget
 	pMDI = new QMdiArea();
-	this->setCentralWidget(pMDI); //核心部件
+	this->setCentralWidget(pMDI);	// 中心区域
+	
+	createDockWindows();
 	
 	//m_picWidget = new WidgetPic();
 	//pMDI->addSubWindow(m_picWidget);
 
-	connect(ui.old, SIGNAL(triggered()), this, SLOT(on_old_triggered()));
+	connect(ui.old, SIGNAL(triggered()), this, SLOT(old()));
 	connect(ui.frame_1, SIGNAL(triggered()), this, SLOT(frame_1()));
 	connect(ui.frame_2, SIGNAL(triggered()), this, SLOT(frame_2()));
 	connect(ui.diff, SIGNAL(triggered()), this, SLOT(diff()));
@@ -34,7 +36,51 @@ MainWindow::MainWindow(QMainWindow *parent)
 }
 
 
-void MainWindow::on_old_triggered()
+void MainWindow::createDockWindows()
+{
+	QDockWidget *dock = new QDockWidget(tr("控制窗口"), this);
+	dock->setAllowedAreas(Qt::LeftDockWidgetArea |
+		Qt::RightDockWidgetArea);
+	WidgetControl *wc_1 = new WidgetControl();
+	dock->setWidget(wc_1);		// 调用此函数之前必须为 widget 添加布局
+	addDockWidget(Qt::LeftDockWidgetArea, dock);
+
+	//connect(ui.view_wc, SIGNAL(triggered()), dock, SLOT(toggleViewAction()));
+	ui.view->addAction(dock->toggleViewAction());
+}
+
+
+void MainWindow::showMistake()
+{
+	switch (flag)
+	{
+	case 0:
+		if (f_1 != 1 || f_2 != 1)
+		{
+			QMessageBox::about(this, "提示", "请先载入图像");
+		}
+		else
+		{
+			QMessageBox::about(this, "提示", "请先进行帧间差分操作");
+		}
+		break;
+	case 1:
+		QMessageBox::about(this, "提示", "请先进行矩形框和中心点标定");
+		break;
+	case 2:
+		QMessageBox::about(this, "提示", "请先显示极坐标范围");
+		break;
+	case 3:
+		QMessageBox::about(this, "提示", "请先显示极坐标图像");
+		break;
+	case 4:
+		QMessageBox::about(this, "提示", "请先进行边缘提取");
+		break;
+	}
+}
+
+
+void MainWindow::old()
 {
 	UAV2022 *m_UAVwidget;
 	m_UAVwidget = new UAV2022();
@@ -74,7 +120,7 @@ void MainWindow::frame_2()
 	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 	name_2 = ImagePath.toStdString();
 	
-	if (name_2 != NULL)
+	if (name_2 != "")
 	{
 		outImage = src_2 = imread(name_2);
 
@@ -115,7 +161,7 @@ void MainWindow::locate()
 {
 	if (flag != 1)
 	{
-		QMessageBox::about(this, "提示", "请先进行帧间差分操作");
+		showMistake();
 	}
 	else
 	{
@@ -124,8 +170,8 @@ void MainWindow::locate()
 
 		int width = src_1.cols;
 		int height = src_1.rows;
-		int x11 = 0, x22 = 0, y11 = 0, y22 = 0;
-		int boxcenterx = 0, boxcentery = 0;
+		int x11 = 0, x22 = 0, y11 = 0, y22 = 0;		// 
+		int boxcenterx = 0, boxcentery = 0;			// 中心点坐标
 
 		unsigned char *img0 = (unsigned char  *)malloc(width * height * sizeof(unsigned char));	// 使指针img0指向一块已分配的内存；sizeof()返回数据类型大小
 		unsigned char *img00 = (unsigned char  *)malloc(width * height * sizeof(unsigned char));
@@ -139,18 +185,13 @@ void MainWindow::locate()
 		vector<int> Single_RowPos, Single_ColPos;		// 用两个向量分别记录行、列投影时像素出现的范围
 		FindSingleTarget(img00, height, width, Single_RowPos, Single_ColPos);  //centerx是col号  ， centery是row号
 
-		//单目标边界定位
-		//col
+		// 单目标边界定位
 		x11 = Single_ColPos.front();	// Single_ColPos.front()记录了第一次出现像素的列序号，即无人机最左边像素的横坐标
 		x22 = Single_ColPos.back();		// 类比上句，即无人机最右边像素的横坐标
-
-		//row
 		y11 = Single_RowPos.front();
 		y22 = Single_RowPos.back();
 
-		//框选区域的中心点
-
-		//针对单目标中心点进行微调
+		// 针对单目标中心点进行微调
 		centerx = (x11 + x22) / 2 /*- 4*/;
 		centery = (y11 + y22) / 2;
 
@@ -160,7 +201,7 @@ void MainWindow::locate()
 		cvtColor(src_1, greyFrame, CV_BGR2GRAY);
 		cvtColor(greyFrame, image_2, CV_GRAY2BGR);
 
-		//标记中心点
+		// 标记中心点
 		for (int i = -2; i <= 2; i++)
 			for (int j = -2; j <= 2; j++)
 			{
@@ -169,9 +210,10 @@ void MainWindow::locate()
 				image_2.at<Vec3b>(centery + i, centerx + j)[2] = 0;
 			}
 
-		boxwidth = abs(x11 - x22);//abs(x11 - x22) + 70;//70//126;//
+		boxwidth = abs(x11 - x22);	//abs(x11 - x22) + 70;//70//126;//
 		boxheight = abs(y11 - y22); //abs(y11 - y22) + 70;//70//121;//
 
+		// 绘制矩形框
 		for (int i = -boxwidth / 2 - 5; i < boxwidth / 2 + 5; i++)
 		{
 			image_2.at<Vec3b>(boxcentery - boxheight / 2 - 5, boxcenterx + i)[0] = 0;
@@ -209,7 +251,7 @@ void MainWindow::polar_range()
 {
 	if (flag != 2)
 	{
-		QMessageBox::about(this, "提示", "请先进行矩形框和中心点标定");
+		showMistake();
 	}
 	else
 	{
@@ -253,7 +295,6 @@ void MainWindow::polar_range()
 					image_2.at<Vec3b>(y1 + 1, x1 + 1)[2] = 255;
 				}
 				/************2021/07/15 标出极坐标转换区域*********************/
-
 
 				if (x1 == x2 || y1 == y2)
 				{
@@ -321,7 +362,7 @@ void MainWindow::polar()
 {
 	if (flag != 3)
 	{
-		QMessageBox::about(this, "提示", "请先显示极坐标范围");
+		showMistake();
 	}
 	else
 	{
@@ -353,7 +394,7 @@ void MainWindow::edge()
 {
 	if (flag != 4)
 	{
-		QMessageBox::about(this, "提示", "请先显示极坐标图像");
+		showMistake();
 	}
 	else
 	{
@@ -456,7 +497,7 @@ void MainWindow::mark()
 {
 	if (flag != 5)
 	{
-		QMessageBox::about(this, "提示", "请先进行边缘提取");
+		showMistake();
 	}
 	else
 	{

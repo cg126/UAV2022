@@ -8,11 +8,12 @@
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QMainWindow>
+#include <QDockWidget>
 #include "function.h"
-#include "ui_UAV2022.h"
 #include "UAV2022.h"
 #include "ui_MainWindow.h"
 #include "WidgetPic.h"
+#include "WidgetControl.h"
 #include <qmdiarea.h>		// ?
 
 class MainWindow : public QMainWindow
@@ -28,7 +29,7 @@ public:
 	WidgetPic *widget_1, *widget_2, *widget_3, *widget_4, *widget_5, *widget_6, *widget_7, *widget_8;
 
 public slots:
-	void on_old_triggered();
+	void old();
 	void frame_1();
 	void frame_2();
 	void diff();
@@ -41,21 +42,15 @@ public slots:
 private:
 	Ui:: MainWindow ui;
 
+	void createDockWindows();
+	void showMistake();
+
 	String name_1, name_2;
 	Mat src_1, src_2;
 	Mat diff_result;
 	Mat greyFrame;
 	int boxwidth = 0, boxheight = 0;
 	int f_1 = 0, f_2 = 0, flag = 0;
-
-	//相关动作
-	int action;
-	//图片原始宽高
-	int pixW;
-	int pixH;
-	//图片的目前宽高
-	int NowW;
-	int NowH;
 
 	int m[401] = { 0 };
 	int n[401] = { 0 };
@@ -68,16 +63,13 @@ private:
 	int ergodic = 1, roi = 0;
 	int **t;
 
-	Mat image_2;
-	Mat imgg;	// 存储极坐标图像
-	Mat img_1;	// 存储极坐标图像二值化结果
-	Mat outImage;
-
-	QRect Paint;		//绘画区域
-	QLabel label;
+	Mat image_2;	// 极坐标转换范围的图像
+	Mat imgg;		// 存储极坐标图像
+	Mat img_1;		// 存储极坐标图像二值化结果
+	Mat outImage;	// 要害点检测图像
 
 	QPoint offset;
 	QPoint Alloffset;
 	//bool event(QEvent *event);
-	//void wheelEvent(QWheelEvent *event);     //鼠标滑轮事件
+	//void wheelEvent(QWheelEvent *event);     // 鼠标滑轮事件
 };
