@@ -38,6 +38,7 @@ public slots:
 	void polar();
 	void edge();
 	void mark();
+	void result();
 
 private:
 	Ui:: MainWindow ui;

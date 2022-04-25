@@ -27,47 +27,50 @@
     <property name="title">
      <string>文件</string>
     </property>
+    <addaction name="action_5"/>
+    <addaction name="separator"/>
     <addaction name="frame_1"/>
     <addaction name="frame_2"/>
     <addaction name="separator"/>
     <addaction name="old"/>
-   </widget>
-   <widget class="QMenu" name="menu_2">
-    <property name="title">
-     <string>检测</string>
-    </property>
-    <addaction name="action_4"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
-     <string>分步</string>
+     <string>要害点检测</string>
     </property>
     <addaction name="diff"/>
     <addaction name="locate"/>
     <addaction name="polar_range"/>
     <addaction name="polar"/>
     <addaction name="edge"/>
+    <addaction name="separator"/>
+    <addaction name="result"/>
+    <addaction name="separator"/>
+    <addaction name="grad"/>
    </widget>
    <widget class="QMenu" name="image">
     <property name="title">
      <string>图像</string>
     </property>
+    <addaction name="action_7"/>
    </widget>
    <widget class="QMenu" name="view">
     <property name="title">
      <string>视图</string>
     </property>
+    <addaction name="action"/>
    </widget>
    <widget class="QMenu" name="help">
     <property name="title">
      <string>帮助</string>
     </property>
+    <addaction name="action_2"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
    <addaction name="image"/>
    <addaction name="view"/>
-   <addaction name="menu_2"/>
    <addaction name="help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -119,6 +122,36 @@
   <action name="view_wc">
    <property name="text">
     <string>控制窗口</string>
+   </property>
+  </action>
+  <action name="result">
+   <property name="text">
+    <string>检测结果</string>
+   </property>
+  </action>
+  <action name="grad">
+   <property name="text">
+    <string>逐步检测</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>隐藏所有窗口</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>打开红外图像</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>滤波</string>
    </property>
   </action>
  </widget>
