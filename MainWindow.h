@@ -9,6 +9,7 @@
 #include <QDesktopWidget>
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QtWidgets>
 #include "function.h"
 #include "UAV2022.h"
 #include "ui_MainWindow.h"
@@ -43,6 +44,8 @@ public slots:
 private:
 	Ui:: MainWindow ui;
 
+	void createToolBar();
+	void createStatusBar();
 	void createDockWindows();
 	void showMistake();
 
@@ -71,6 +74,4 @@ private:
 
 	QPoint offset;
 	QPoint Alloffset;
-	//bool event(QEvent *event);
-	//void wheelEvent(QWheelEvent *event);     // Êó±ê»¬ÂÖÊÂ¼þ
 };

@@ -18,12 +18,12 @@ MainWindow::MainWindow(QMainWindow *parent)
 
 	// Central Widget
 	pMDI = new QMdiArea();
-	this->setCentralWidget(pMDI);	// 中心区域
-	
+	this->setCentralWidget(pMDI);	// 中心区域	
+
+	createToolBar();
+	createStatusBar();
 	createDockWindows();
-	
-	//m_picWidget = new WidgetPic();
-	//pMDI->addSubWindow(m_picWidget);
+	setUnifiedTitleAndToolBarOnMac(true);
 
 	connect(ui.old, SIGNAL(triggered()), this, SLOT(old()));
 	connect(ui.frame_1, SIGNAL(triggered()), this, SLOT(frame_1()));
@@ -37,16 +37,32 @@ MainWindow::MainWindow(QMainWindow *parent)
 }
 
 
+void MainWindow::createToolBar()
+{
+	QToolBar *fileToolBar = addToolBar(tr("File"));
+	fileToolBar->addAction(ui.frame_1);
+	fileToolBar->addAction(ui.frame_2);
+
+	QToolBar *detectToolBar = addToolBar(tr("Detect"));
+	detectToolBar->addAction(ui.result);
+}
+
+void MainWindow::createStatusBar()
+{
+	statusBar()->showMessage(tr("Ready"));
+}
+
+
 void MainWindow::createDockWindows()
+
 {
 	QDockWidget *dock = new QDockWidget(tr("控制窗口"), this);
 	dock->setAllowedAreas(Qt::LeftDockWidgetArea |
-		Qt::RightDockWidgetArea);
+		Qt::RightDockWidgetArea);		// 设置允许DockWidget可以出现的位置
 	WidgetControl *wc_1 = new WidgetControl();
 	dock->setWidget(wc_1);		// 调用此函数之前必须为 widget 添加布局
+	dock->hide();
 	addDockWidget(Qt::LeftDockWidgetArea, dock);
-
-	//connect(ui.view_wc, SIGNAL(triggered()), dock, SLOT(toggleViewAction()));
 	ui.view->addAction(dock->toggleViewAction());
 }
 
@@ -96,7 +112,7 @@ void MainWindow::frame_1()
 	widget_1->setWindowTitle("第 1 帧图像");
 
 	QString ImagePath;
-	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
+	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit("./resources"), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 	name_1 = ImagePath.toStdString();
 
 	if (name_1 != "")
@@ -118,7 +134,7 @@ void MainWindow::frame_2()
 	widget_2->setWindowTitle("第 2 帧图像");
 
 	QString ImagePath;
-	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit(""), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
+	ImagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), QString::fromLocal8Bit("./resources"), tr("Image Files (*.jpg *.png)"));	// 文件选择对话框
 	name_2 = ImagePath.toStdString();
 	
 	if (name_2 != "")
