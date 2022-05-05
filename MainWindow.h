@@ -67,6 +67,8 @@ private:
 	int ergodic = 1, roi = 0;
 	int **t;
 
+	const int L = 7;
+
 	Mat image_2;	// 极坐标转换范围的图像
 	Mat imgg;		// 存储极坐标图像
 	Mat img_1;		// 存储极坐标图像二值化结果

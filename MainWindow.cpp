@@ -26,13 +26,14 @@ MainWindow::MainWindow(QMainWindow *parent)
 	setUnifiedTitleAndToolBarOnMac(true);
 
 	connect(ui.old, SIGNAL(triggered()), this, SLOT(old()));
-	connect(ui.frame_1, SIGNAL(triggered()), this, SLOT(frame_1()));
-	connect(ui.frame_2, SIGNAL(triggered()), this, SLOT(frame_2()));
+	connect(ui.fram_1, SIGNAL(triggered()), this, SLOT(frame_1()));
+	connect(ui.fram_2, SIGNAL(triggered()), this, SLOT(frame_2()));
 	connect(ui.diff, SIGNAL(triggered()), this, SLOT(diff()));
 	connect(ui.locate, SIGNAL(triggered()), this, SLOT(locate()));
 	connect(ui.polar_range, SIGNAL(triggered()), this, SLOT(polar_range()));
 	connect(ui.polar, SIGNAL(triggered()), this, SLOT(polar()));
 	connect(ui.edge, SIGNAL(triggered()), this, SLOT(edge()));
+	connect(ui.mark, SIGNAL(triggered()), this, SLOT(mark()));
 	connect(ui.result, SIGNAL(triggered()), this, SLOT(result()));
 }
 
@@ -40,8 +41,8 @@ MainWindow::MainWindow(QMainWindow *parent)
 void MainWindow::createToolBar()
 {
 	QToolBar *fileToolBar = addToolBar(tr("File"));
-	fileToolBar->addAction(ui.frame_1);
-	fileToolBar->addAction(ui.frame_2);
+	fileToolBar->addAction(ui.fram_1);
+	fileToolBar->addAction(ui.fram_2);
 
 	QToolBar *detectToolBar = addToolBar(tr("Detect"));
 	detectToolBar->addAction(ui.result);
@@ -539,13 +540,13 @@ void MainWindow::mark()
 			//point_x += 2;
 			//point_y -= 4;
 
-			line(outImage, Point(point_x - 10, point_y), Point(point_x + 10, point_y), Scalar(0, 0, 255), 1, CV_AA);
-			line(outImage, Point(point_x, point_y - 10), Point(point_x, point_y + 10), Scalar(0, 0, 255), 1, CV_AA);
+			line(outImage, Point(point_x - L, point_y), Point(point_x + L, point_y), Scalar(0, 0, 255), 1, CV_AA);
+			line(outImage, Point(point_x, point_y - L), Point(point_x, point_y + L), Scalar(0, 0, 255), 1, CV_AA);
 		}
 
 		// 标记中心
-		line(outImage, Point(centerx - 10, centery), Point(centerx + 10, centery), Scalar(255, 0, 0), 1, CV_AA);
-		line(outImage, Point(centerx, centery - 10), Point(centerx, centery + 10), Scalar(255, 0, 0), 1, CV_AA);
+		line(outImage, Point(centerx - L, centery), Point(centerx + L, centery), Scalar(255, 0, 0), 1, CV_AA);
+		line(outImage, Point(centerx, centery - L), Point(centerx, centery + L), Scalar(255, 0, 0), 1, CV_AA);
 
 		imwrite("./tmp/result.png", outImage);
 
@@ -889,13 +890,13 @@ void MainWindow::result()
 			//point_x += 2;
 			//point_y -= 4;
 
-			line(outImage, Point(point_x - 10, point_y), Point(point_x + 10, point_y), Scalar(0, 0, 255), 1, CV_AA);
-			line(outImage, Point(point_x, point_y - 10), Point(point_x, point_y + 10), Scalar(0, 0, 255), 1, CV_AA);
+			line(outImage, Point(point_x - L, point_y), Point(point_x + L, point_y), Scalar(0, 0, 255), 1, CV_AA);
+			line(outImage, Point(point_x, point_y - L), Point(point_x, point_y + L), Scalar(0, 0, 255), 1, CV_AA);
 		}
 
 		// 标记中心
-		line(outImage, Point(centerx - 10, centery), Point(centerx + 10, centery), Scalar(255, 0, 0), 1, CV_AA);
-		line(outImage, Point(centerx, centery - 10), Point(centerx, centery + 10), Scalar(255, 0, 0), 1, CV_AA);
+		line(outImage, Point(centerx - L, centery), Point(centerx + L, centery), Scalar(255, 0, 0), 1, CV_AA);
+		line(outImage, Point(centerx, centery - L), Point(centerx, centery + L), Scalar(255, 0, 0), 1, CV_AA);
 
 		imwrite("./tmp/result.png", outImage);
 
